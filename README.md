@@ -14,7 +14,7 @@ A gym management system built with **Laravel** that allows administrators to man
 ---
 
 ## 🛠️ Tech Stack
-- **Backend**: Laravel 10
+- **Backend**: Laravel 12
 - **Database**: MySQL
 - **Authentication**: Laravel Sanctum
 - **Frontend**: Vite React
