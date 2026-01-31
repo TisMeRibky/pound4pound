@@ -57,20 +57,52 @@ export default function Dashboard() {
       console.error(err);
       setMessage('Logout failed.');
     }
+    
+  };
+
+  const handleMenuClick = (menu) => {
+    console.log("Clicked:", menu);
+    // you can also update state or navigate
   };
 
   if (loading) return <p>Loading...</p>;
 
-  return (
-    <div style={{ maxWidth: '500px', margin: '50px auto', textAlign: 'center' }}>
+  
+
+return (
+  <div style={{ display: 'flex', minHeight: '100vh' }}>
+    {/* Sidebar */}
+    <div
+      style={{
+        width: '200px',
+        backgroundColor: '#f0f0f0',
+        padding: '20px',
+        boxShadow: '2px 0 5px rgba(0,0,0,0.1)',
+      }}
+    >
+      <h3>Menu</h3>
+      <ul style={{ listStyle: 'none', padding: 0 }}>
+        <li style={{ margin: '10px 0' }}>Dashboard</li>
+        <li style={{ margin: '10px 0' }}>Profile</li>
+        <li style={{ margin: '10px 0' }}>Settings</li>
+      </ul>
+    </div>
+
+    {/* Main Content */}
+    <div style={{ flex: 1, padding: '50px', textAlign: 'center' }}>
       <h2>Welcome, {user.name}!</h2>
       <p>Email: {user.email}</p>
 
       {message && <p>{message}</p>}
 
-      <button onClick={handleLogout} style={{ marginTop: '20px', padding: '10px 20px' }}>
+      <button
+        onClick={handleLogout}
+        style={{ marginTop: '20px', padding: '10px 20px' }}
+      >
         Logout
       </button>
     </div>
-  );
+  </div>
+);
+
 }
