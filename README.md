@@ -26,5 +26,5 @@ A gym management system built with **Laravel** that allows administrators to man
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/gym-admin.git
-   cd gym-admin
+   git clone https://github.com/russgards03/pound4pound.git
+   cd pound4pound
