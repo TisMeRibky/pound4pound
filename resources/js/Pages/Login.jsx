@@ -7,36 +7,45 @@ export default function Login() {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage('');
 
     try {
-      const res = await fetch('/api/login', {
+        const res = await fetch('/api/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
         },
         body: JSON.stringify({ email, password }),
-      });
+        });
 
-      const data = await res.json();
+        const contentType = res.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Server did not return JSON');
+        }
 
-      if (res.ok) {
+        const data = await res.json();
+
+        if (!res.ok) {
+        setMessage(data.message || 'Login failed');
+        return;
+        }
+
+        // ✅ Success
         localStorage.setItem('token', data.data.token);
         localStorage.setItem('user', JSON.stringify(data.data.user));
-        setMessage('Login successful!');
 
-        // SPA-style navigation
+        setMessage('Login successful!');
         navigate('/dashboard');
-      } else {
-        setMessage(data.message || 'Login failed');
-      }
+
     } catch (err) {
-      console.error(err);
-      setMessage('An error occurred.');
+        console.error(err);
+        setMessage('Login error. Check console.');
     }
-  };
+    };
+
 
   return (
     <div style={{ maxWidth: '400px', margin: '50px auto', textAlign: 'center' }}>
