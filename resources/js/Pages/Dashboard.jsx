@@ -83,7 +83,6 @@ export default function Dashboard() {
   if (loading) return <p>Loading...</p>;
 
 
-
 return (
   <div style={{ display: 'flex', minHeight: '100vh' }}>
     {/* Sidebar */}
@@ -142,7 +141,7 @@ return (
         Payment
         </li>
 
-        {/*Member Dropdown*/}
+        {/* Member Dropdown */}
         <li
         style={{
             margin: '10px 0',
@@ -173,28 +172,24 @@ return (
               </li>
             </ul>
           )}
-      </ul>
-    </div>
 
-    {/* User Section */}
-  <div style={{ marginTop: '30px', textAlign: 'left', padding: '10px', borderTop: '1px solid #ccc' }}>
-    <p style={{ margin: 0, fontWeight: 'bold' }}>{user.name}</p>
-    <p style={{ margin: '5px 0 10px 0', fontSize: '0.85rem', color: '#555' }}>{user.email}</p>
-    <button
-      onClick={handleLogout}
-      style={{
-        padding: '8px 12px',
-        width: '100%',
-        borderRadius: '4px',
-        backgroundColor: '#f56565', // soft red
-        color: 'white',
-        border: 'none',
-        cursor: 'pointer',
-      }}
-    >
-      Logout
-    </button>
-    
+        {/* User Details */}
+        <div style={{ flex: 1, padding: '8px',marginTop: '50px', textAlign: 'left' }}>
+            <h2>Welcome, {user.name}!</h2>
+            <p>Email: {user.email}</p>
+
+            {message && <p>{message}</p>}
+
+            {/* Logout */}
+            <button
+                onClick={handleLogout}
+                style={{ marginTop: '20px', padding: '10px 20px' }}
+            >
+                Logout
+            </button>
+        </div>
+
+      </ul>
     </div>
   </div>
 );
