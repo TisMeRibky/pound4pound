@@ -82,116 +82,69 @@ export default function Dashboard() {
 
   if (loading) return <p>Loading...</p>;
 
+{/* Sidebar */}
 
 return (
-  <div style={{ display: 'flex', minHeight: '100vh' }}>
-    {/* Sidebar */}
-    <div
+<div
+  style={{
+    width: '220px',
+    backgroundColor: '#f0f0f0',
+    padding: '20px',
+    boxShadow: '2px 0 5px rgba(0,0,0,0.1)',
+    display: 'flex',
+    flexDirection: 'column',       // vertical layout
+    justifyContent: 'space-between', // menu top, user bottom
+    height: '100vh',               // full height
+  }}
+>
+  {/* Top Menu */}
+  <div>
+    <h3 style={{ marginBottom: '20px', fontSize: '1.2rem' }}>Menu</h3>
+    <ul style={{ listStyle: 'none', padding: 0 }}>
+      <li style={{ margin: '10px 0', cursor: 'pointer', padding: '8px', borderRadius: '4px' }} onClick={() => navigate('/dashboard')}>
+        Dashboard
+      </li>
+      <li style={{ margin: '10px 0', cursor: 'pointer', padding: '8px', borderRadius: '4px' }} onClick={() => navigate('/programs')}>
+        Programs
+      </li>
+
+      {/* Member Dropdown */}
+      <li style={{ margin: '10px 0', cursor: 'pointer', padding: '8px', borderRadius: '4px' }} onClick={() => setDropdownOpen(!dropdownOpen)}>
+        Members {dropdownOpen ? '▼' : '▶'}
+      </li>
+      {dropdownOpen && (
+        <ul style={{ listStyle: 'none', paddingLeft: '20px' }}>
+          <li style={{ margin: '10px 0', cursor: 'pointer' }} onClick={() => handleMemberClick('Member Profile')}>Member Profile</li>
+          <li style={{ margin: '10px 0', cursor: 'pointer' }} onClick={() => handleMemberClick('Membership')}>Membership</li>
+          <li style={{ margin: '10px 0', cursor: 'pointer' }} onClick={() => handleMemberClick('Training Subs.')}>Training Subs.</li>
+          <li style={{ margin: '10px 0', cursor: 'pointer' }} onClick={() => handleMemberClick('Payments')}>Payments</li>
+        </ul>
+      )}
+    </ul>
+  </div>
+
+  {/* User Info at Bottom */}
+  <div style={{ borderTop: '1px solid #ccc', paddingTop: '10px', textAlign: 'left' }}>
+    <p style={{ margin: 0, fontWeight: 'bold' }}>{user.name}</p>
+    <p style={{ margin: '5px 0', fontSize: '0.85rem', color: '#555' }}>{user.email}</p>
+    <button
+      onClick={handleLogout}
       style={{
-        width: '200px',
-        backgroundColor: '#f0f0f0',
-        padding: '20px',
-        boxShadow: '2px 0 5px rgba(0,0,0,0.1)',
+        marginTop: '10px',
+        padding: '8px 12px',
+        width: '100%',
+        borderRadius: '4px',
+        backgroundColor: '#f56565',
+        color: 'white',
+        border: 'none',
+        cursor: 'pointer',
       }}
     >
-      <h3>Menu</h3>
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        <li
-        style={{
-            margin: '10px 0',
-            cursor: 'pointer',
-            padding: '8px',
-            borderRadius: '4px'
-        }}
-        onClick={() => navigate('/dashboard')}
-        >
-        Dashboard
-        </li>
-        <li
-        style={{
-            margin: '10px 0',
-            cursor: 'pointer',
-            padding: '8px',
-            borderRadius: '4px'
-        }}
-        onClick={() => navigate('/programs')}
-        >
-        Programs
-        </li>
-        <li
-        style={{
-            margin: '10px 0',
-            cursor: 'pointer',
-            padding: '8px',
-            borderRadius: '4px'
-        }}
-        onClick={() => navigate('/plans')}
-        >
-        Plans
-        </li>
-        <li
-        style={{
-            margin: '10px 0',
-            cursor: 'pointer',
-            padding: '8px',
-            borderRadius: '4px'
-        }}
-        onClick={() => navigate('/payment')}
-        >
-        Payment
-        </li>
-
-        {/* Member Dropdown */}
-        <li
-        style={{
-            margin: '10px 0',
-            cursor: 'pointer',
-            padding: '8px',
-            borderRadius: '4px'
-        }}
-        onClick={() => setDropdownOpen(!dropdownOpen)}
-        >
-        
-        Members {dropdownOpen ? '▼' : '▶'}
-        </li>
-
-        {/* Member Dropdown items */}
-          {dropdownOpen && (
-            <ul style={{ listStyle: 'none', paddingLeft: '20px' }}>
-              <li style={{ margin: '25px 0', cursor: 'pointer' }} onClick={() => handleMemberClick('Member Profile')}>
-                Member Profile
-              </li>
-              <li style={{ margin: '25px 0', cursor: 'pointer' }} onClick={() => handleMemberClick('Membership')}>
-                Membership
-              </li>
-                <li style={{ margin: '25px 0', cursor: 'pointer' }} onClick={() => handleMemberClick('Training Subs.,')}>
-                Training Subs.,
-              </li>
-                <li style={{ margin: '25px 0', cursor: 'pointer' }} onClick={() => handleMemberClick('Payments')}>
-                Payments
-              </li>
-            </ul>
-          )}
-
-        {/* User Details */}
-        <div style={{ flex: 1, padding: '8px',marginTop: '50px', textAlign: 'left' }}>
-            <h2>Welcome, {user.name}!</h2>
-            <p>Email: {user.email}</p>
-
-            {message && <p>{message}</p>}
-
-            {/* Logout */}
-            <button
-                onClick={handleLogout}
-                style={{ marginTop: '20px', padding: '10px 20px' }}
-            >
-                Logout
-            </button>
-        </div>
-
-      </ul>
-    </div>
+      Logout
+    </button>
   </div>
+</div>
+
 );
 
 }
