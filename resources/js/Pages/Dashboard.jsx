@@ -94,7 +94,7 @@ return (
     display: 'flex',
     flexDirection: 'column',       // vertical layout
     justifyContent: 'space-between', // menu top, user bottom
-    height: '100vh',               // full height
+    height: '95vh',               // full height
   }}
 >
   {/* Top Menu */}
