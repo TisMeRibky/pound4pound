@@ -1,11 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [checked, setChecked] = useState(false); // ✅ track if we checked token
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      // only navigate if token exists and we haven't redirected yet
+      navigate('/dashboard', { replace: true });
+    }
+    setChecked(true); // done checking
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,11 +31,6 @@ export default function Login() {
         body: JSON.stringify({ email, password }),
       });
 
-      const contentType = res.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        throw new Error('Server did not return JSON');
-      }
-
       const data = await res.json();
 
       if (!res.ok) {
@@ -33,22 +38,25 @@ export default function Login() {
         return;
       }
 
-      // Login=Success
       localStorage.setItem('token', data.data.token);
       localStorage.setItem('user', JSON.stringify(data.data.user));
 
-      setMessage('Login successful!');
-      navigate('/dashboard');
+      navigate('/dashboard', { replace: true }); // ✅ replace to avoid back button issues
     } catch (err) {
       console.error(err);
       setMessage('Login error. Check console.');
     }
   };
 
+  // Optional: show nothing until we checked token
+  if (!checked) return null;
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
       <div className="w-full max-w-md bg-white shadow-md rounded-lg p-8">
-        <h2 className="text-2xl font-bold mb-6 text-center">Pound for Pound Login</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">
+          Pound for Pound Login
+        </h2>
         <form onSubmit={handleSubmit} className="flex flex-col">
           <input
             type="email"
