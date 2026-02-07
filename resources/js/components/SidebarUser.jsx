@@ -1,4 +1,6 @@
 export default function SidebarUser({ user, onLogout }) {
+  if (!user) return null;
+  
   return (
     <div className="border-t pt-4">
       <p className="font-semibold">{user.name}</p>
