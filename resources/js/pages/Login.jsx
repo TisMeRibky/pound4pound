@@ -5,16 +5,7 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const [checked, setChecked] = useState(false); // ✅ track if we checked token
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      navigate('/dashboard', { replace: true });
-    }
-    setChecked(true); // done checking
-  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,9 +37,6 @@ export default function Login() {
       setMessage('Login error. Check console.');
     }
   };
-
-  // Optional: show nothing until we checked token
-  if (!checked) return null;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
