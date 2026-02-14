@@ -6,7 +6,9 @@ import Login from './pages/Login.jsx';
 import Dashboard from './pages/Dashboard';
 import Programs from './pages/Programs';
 
-function PrivateRoute({ user, children }) {
+function PrivateRoute({ user, loading, children }) {
+  if (loading) return <div>Loading...</div>;
+
   if (!user) return <Navigate to="/" replace />;
   return children;
 }
@@ -59,22 +61,23 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-      <Route
-        path="/dashboard"
-        element={
-          <PrivateRoute user={user}>
-            <Dashboard user={user} onLogout={handleLogout} />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/programs"
-        element={
-          <PrivateRoute user={user}>
-            <Programs user={user} onLogout={handleLogout} />
-          </PrivateRoute>
-        }
-      />
+    <Route
+      path="/dashboard"
+      element={
+        <PrivateRoute user={user} loading={loading}>
+          <Dashboard user={user} onLogout={handleLogout} />
+        </PrivateRoute>
+      }
+    />
+
+    <Route
+      path="/programs"
+      element={
+        <PrivateRoute user={user} loading={loading}>
+          <Programs user={user} onLogout={handleLogout} />
+        </PrivateRoute>
+      }
+    />
     </Routes>
   );
 }
