@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 
-export default function Login() {
+export default function Login({ user, setUser }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const navigate = useNavigate();
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
@@ -31,13 +29,14 @@ export default function Login() {
       localStorage.setItem('token', data.data.token);
       localStorage.setItem('user', JSON.stringify(data.data.user));
 
-      navigate('/dashboard', { replace: true }); // ✅ replace to avoid back button issues
+      setUser(data.data.user);
     } catch (err) {
       console.error(err);
       setMessage('Login error. Check console.');
     }
   };
-
+  
+  
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
       <div className="w-full max-w-md bg-white shadow-md rounded-lg p-8">

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-export default function SidebarMenu() {
+export default function SidebarMenu({ onLogout }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
@@ -37,17 +37,25 @@ export default function SidebarMenu() {
             <li className={subItem} onClick={() => navigate('/memberprofiles')}>
               Member Profile
             </li>
-            <li className={subItem} onClick={() => navigate('/membership')}>
+            <li className={subItem} onClick={() => navigate('/memberships')}>
               Membership
             </li>
-            <li className={subItem}>
+            <li className={subItem} onClick={() => navigate('/trainingsubs')}>
               Training Subs.
             </li>
-            <li className={subItem}>
+            <li className={subItem} onClick={() => navigate('/payments')}>
               Payments
             </li>
           </ul>
         )}
+
+        {/* Logout */}
+        <li
+      className="my-4 px-3 py-2 rounded cursor-pointer text-red-600 hover:bg-red-100"
+      onClick={onLogout}
+    >
+      Logout
+      </li>
       </ul>
     </div>
   );

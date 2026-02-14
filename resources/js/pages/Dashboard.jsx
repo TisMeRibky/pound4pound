@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from '../components/Sidebar';
 import AnnualStatCard from '../components/AnnualStatCard';
 import MonthlyStatCard from '../components/MonthlyStatCard';
 
@@ -48,8 +47,6 @@ export default function Dashboard() {
 
 return (
     <div className="flex h-screen overflow-hidden">
-      {/* Sidebar */}
-      <Sidebar user={user} onLogout={handleLogout} />
 
       {/* Main Content */}
       <main className="flex-1 p-10 bg-gray-50 overflow-auto">

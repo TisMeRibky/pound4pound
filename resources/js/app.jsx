@@ -2,14 +2,28 @@ import React, { useState, useEffect } from 'react';
 import '../css/app.css';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Layout from './components/Layout';
 import Login from './pages/Login.jsx';
 import Dashboard from './pages/Dashboard';
 import Programs from './pages/Programs';
+import MemberProfiles from './pages/Members/MemberProfiles';
+import Memberships from './pages/Members/Memberships';
+import TrainingSubs from './pages/Members/TrainingSubs';
+import Payments from './pages/Members/Payments';
 
 function PrivateRoute({ user, loading, children }) {
   if (loading) return <div>Loading...</div>;
 
   if (!user) return <Navigate to="/" replace />;
+  return children;
+}
+
+function PublicRoute({ user, loading, children }) {
+  if (loading) return <div>Loading...</div>;
+
+  if (user) {
+    return <Navigate to="/dashboard" replace />;
+  }
   return children;
 }
 
@@ -36,7 +50,7 @@ function App() {
         localStorage.removeItem('token');
       })
       .finally(() => {
-        setLoading(false); // ✅ important
+        setLoading(false); 
       });
   }, []);
 
@@ -55,30 +69,35 @@ function App() {
 
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    setUser(null); // redirect happens via PrivateRoute
+
+    setUser(null);
   };
 
   return (
-    <Routes>
-      <Route path="/" element={<Login />} />
+  <Routes>
     <Route
-      path="/dashboard"
+      path="/"
       element={
-        <PrivateRoute user={user} loading={loading}>
-          <Dashboard user={user} onLogout={handleLogout} />
-        </PrivateRoute>
+        <PublicRoute user={user} loading={loading}>
+          <Login user={user} setUser={setUser} />
+        </PublicRoute>
       }
     />
-
     <Route
-      path="/programs"
       element={
         <PrivateRoute user={user} loading={loading}>
-          <Programs user={user} onLogout={handleLogout} />
+          <Layout onLogout={handleLogout} />
         </PrivateRoute>
       }
-    />
-    </Routes>
+    >
+      <Route path="/dashboard" element={<Dashboard user={user} />} />
+      <Route path="/programs" element={<Programs user={user} />} />
+      <Route path="/memberprofiles" element={<MemberProfiles user={user} />} />
+      <Route path="/memberships" element={<Memberships user={user} />} />
+      <Route path="/trainingsubs" element={<TrainingSubs user={user} />} />
+      <Route path="/payments" element={<Payments user={user} />} />
+    </Route>
+  </Routes>
   );
 }
 
