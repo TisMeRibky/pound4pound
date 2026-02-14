@@ -11,7 +11,6 @@ export default function Login() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      // only navigate if token exists and we haven't redirected yet
       navigate('/dashboard', { replace: true });
     }
     setChecked(true); // done checking

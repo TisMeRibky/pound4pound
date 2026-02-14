@@ -13,17 +13,29 @@ function PrivateRoute({ user, children }) {
 
 function App() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (!token) return;
+      if (!token) {
+        setLoading(false);
+        return;
+      }
 
     fetch('/api/user', {
-      headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
+      headers: { 
+        Authorization: `Bearer ${token}`, 
+        Accept: 'application/json' 
+      },
     })
       .then(res => res.json())
       .then(data => setUser(data.data.user))
-      .catch(() => localStorage.removeItem('token'));
+      .catch(() => {
+        localStorage.removeItem('token');
+      })
+      .finally(() => {
+        setLoading(false); // ✅ important
+      });
   }, []);
 
   const handleLogout = async () => {
