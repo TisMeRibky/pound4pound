@@ -78,7 +78,7 @@ export default function Login() {
 
       <form onSubmit={handleSubmit} className="w-full px-12">
         {/* Email */}
-        <label className="block text-sm font-bold mb-2 text-black">
+        <label className="font-bebas text-xl tracking-wider">
           EMAIL
         </label>
         <input
@@ -90,7 +90,7 @@ export default function Login() {
         />
 
         {/* Password */}
-        <label className="block text-sm font-bold mb-2 text-black">
+        <label className="font-bebas text-xl tracking-wider">
           PASSWORD
         </label>
         <input
@@ -104,7 +104,7 @@ export default function Login() {
         {/* Login Button */}
         <button
           type="submit"
-          className="w-full py-3 font-bold text-black transition"
+          className="w-full py-3 font-bebas text-xl tracking-wider"
           style={{
             backgroundColor: '#FFDE59',
             border: '5px solid #FFFFFF',
@@ -115,8 +115,8 @@ export default function Login() {
         </button>
 
         {/* Register */}
-        <p className="mt-3 text-center text-xs font-semibold underline cursor-pointer">
-          REGISTER
+        <p className=" text-center  w-full py-3 font-bebas underline text-lg tracking-wider">
+        REGISTER
         </p>
       </form>
 
