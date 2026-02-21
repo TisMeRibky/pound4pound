@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function CreateMember({ token }) {
+export default function CreateMember({ token, onSuccess }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import CreateMember from './CreateMember'; 
+import DataTable from '../../components/DataTable';
 
 export default function MemberProfiles({ user }) {
   const [members, setMembers] = useState([]);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     fetch('/api/members', {
@@ -12,33 +14,50 @@ export default function MemberProfiles({ user }) {
       .then(data => setMembers(data.data));
   }, []);
 
+  const columns = [
+    { key: 'first_name', label: 'First Name' },
+    { key: 'last_name', label: 'Last Name' },
+    { key: 'email', label: 'Email' },
+    { key: 'phone', label: 'Phone' },
+  ];
+
   return (
     <div className="flex">
       <main className="flex-1 p-5">
-        <h1 className="text-2xl font-bold mb-4">Member Profiles</h1>
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-bold">Member Profiles</h1>
+          <button
+            onClick={() => setShowForm(true)}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+          >
+            Add Member
+          </button>
+        </div>
 
-        {/* Here’s where you render the CreateMember form */}
-        <CreateMember token={localStorage.getItem('token')} />
+        {/* Reusable table */}
+        <DataTable data={members} columns={columns} itemsPerPage={10} />
 
-        {/* Example members table */}
-        <table className="w-full border">
-          <thead>
-            <tr>
-              <th className="border p-2">Name</th>
-              <th className="border p-2">Email</th>
-              <th className="border p-2">Phone</th>
-            </tr>
-          </thead>
-          <tbody>
-            {members.map(member => (
-              <tr key={member.id}>
-                <td className="border p-2">{member.first_name} {member.last_name}</td>
-                <td className="border p-2">{member.email}</td>
-                <td className="border p-2">{member.phone}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {/* Modal Pop-up for CreateMember */}
+        {showForm && (
+          <div className="fixed inset-0 bg-opacity-20 backdrop-blur-sm flex justify-center items-center z-50">
+            <div className="bg-white rounded-lg w-full max-w-md p-6 relative shadow-lg">
+              <button
+                className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold"
+                onClick={() => setShowForm(false)}
+              >
+                ✖
+              </button>
+
+              <CreateMember
+                token={localStorage.getItem('token')}
+                onSuccess={() => {
+                  fetchMembers();
+                  setShowForm(false);
+                }}
+              />
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

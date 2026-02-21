@@ -103,6 +103,8 @@ function App() {
   );
 }
 
+document.body.style.overflow = 'hidden';
+
 createRoot(document.getElementById('app')).render(
   <BrowserRouter basename="/">
     <App />
