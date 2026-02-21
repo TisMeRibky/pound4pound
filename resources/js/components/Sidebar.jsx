@@ -3,8 +3,8 @@ import SidebarUser from './SidebarUser';
 
 export default function Sidebar({ user, onLogout }) {
   return (
-    <aside className="w-[220px] h-screen bg-gray-100 p-5 shadow-md flex flex-col justify-between">
-      <SidebarMenu />
+    <aside className="fixed inset-y-0 w-[220px] bg-[#03023B] p-5 … overflow-hidden">
+      <SidebarMenu onLogout={onLogout} />
       <SidebarUser user={user} onLogout={onLogout} />
     </aside>
   );

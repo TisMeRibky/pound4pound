@@ -1,3 +1,5 @@
+import logout from '@/assets/Logout.svg';
+import logo from '@/assets/Logo.svg';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -6,22 +8,26 @@ export default function SidebarMenu({ onLogout }) {
   const [open, setOpen] = useState(false);
 
   const menuItem =
-    'my-2 px-3 py-2 rounded cursor-pointer hover:bg-gray-200';
+  'font-bebas text-2xl my-2 pl-0 pr-3 py-2 rounded-r-lg cursor-pointer text-white hover:text-black hover:bg-[#FFDE59]';
 
   const subItem =
-    'my-2 ml-4 cursor-pointer text-sm hover:text-blue-600';
+    'font-bebas text-xl my-2 ml-4 cursor-pointer text-sm text-white hover:text-black hover:bg-[#FFDE59] rounded px-2 py-1';
 
   return (
-    <div>
-      <h3 className="text-lg font-semibold mb-4">Menu</h3>
+    <div className="flex flex-col h-screen">
+      <img src={logo} alt="Pound for Pound Fitness" className="mb-6 h-20"/>
 
-      <ul>
+      <ul className="flex flex-col flex-1">
         <li className={menuItem} onClick={() => navigate('/dashboard')}>
           Dashboard
         </li>
 
         <li className={menuItem} onClick={() => navigate('/programs')}>
           Programs
+        </li>
+
+        <li className={menuItem} onClick={() => navigate('/plans')}>
+          Plans
         </li>
 
         {/* Dropdown */}
@@ -51,11 +57,11 @@ export default function SidebarMenu({ onLogout }) {
 
         {/* Logout */}
         <li
-      className="my-4 px-3 py-2 rounded cursor-pointer text-red-600 hover:bg-red-100"
-      onClick={onLogout}
-    >
-      Logout
-      </li>
+          className="mt-auto font-bebas text-2xl mb-8 px-3 py-2 rounded cursor-pointer text-red-600 hover:bg-red-100 flex items-center"
+          onClick={onLogout}
+        >
+          Logout <img src={logout} alt="Logout Icon" className="ml-2 h-6 w-6" />
+        </li>
       </ul>
     </div>
   );
