@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Member;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -11,19 +12,14 @@ class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // Create a single user like your register method
         User::create([
             'name' => 'Test User',
             'email' => 'test@example.com',
-            'password' => Hash::make('password123'), // hashed password
+            'password' => Hash::make('password123'), 
         ]);
 
-        // Optionally, create multiple users
         $users = [
             ['name' => 'Lij Faeldonea', 'email' => 'lij@gmail.com', 'password' => 'lij123'],
             ['name' => 'KJR Calampinay', 'email' => 'kjr@gmail.com', 'password' => 'kjr123'],
@@ -38,7 +34,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // If you want, you can still use factories for more random users
-        // User::factory(10)->create();
+        Member::factory()->count(10)->create();
     }
 }
