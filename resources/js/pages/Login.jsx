@@ -1,7 +1,9 @@
 import logo from '@/assets/logo.svg';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login({ user, setUser }) {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -31,12 +33,12 @@ export default function Login({ user, setUser }) {
       localStorage.setItem('user', JSON.stringify(data.data.user));
 
       setUser(data.data.user);
+      navigate('/dashboard');
     } catch (err) {
       console.error(err);
       setMessage('Login error. Check console.');
     }
   };
-  
   
   return (
   <div

@@ -6,6 +6,7 @@ import Layout from './components/Layout';
 import Login from './pages/Login.jsx';
 import Dashboard from './pages/Dashboard';
 import Programs from './pages/Programs';
+import Plans from './pages/Plans';
 import MemberProfiles from './pages/Members/MemberProfiles';
 import Memberships from './pages/Members/Memberships';
 import TrainingSubs from './pages/Members/TrainingSubs';
@@ -92,6 +93,7 @@ function App() {
     >
       <Route path="/dashboard" element={<Dashboard user={user} />} />
       <Route path="/programs" element={<Programs user={user} />} />
+      <Route path="/plans" element={<Plans user={user} />} />
       <Route path="/memberprofiles" element={<MemberProfiles user={user} />} />
       <Route path="/memberships" element={<Memberships user={user} />} />
       <Route path="/trainingsubs" element={<TrainingSubs user={user} />} />
