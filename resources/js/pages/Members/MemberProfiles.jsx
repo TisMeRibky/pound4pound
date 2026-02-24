@@ -15,12 +15,20 @@ export default function MemberProfiles({ user }) {
   }, []);
 
   const columns = [
-    { key: 'first_name', label: 'First Name' },
-    { key: 'last_name', label: 'Last Name' },
-    { key: 'email', label: 'Email' },
-    { key: 'phone', label: 'Phone' },
-    { key: 'status', label: 'Status' },
-  ];
+  { key: 'first_name', label: 'First Name' },
+  { key: 'last_name', label: 'Last Name' },
+  { key: 'email', label: 'Email' },
+  { key: 'phone', label: 'Phone' },
+  {
+    key: 'status',
+    label: 'Status',
+    type: 'badge',
+    badgeColors: { /* badge color classes based on status value */
+      active: 'bg-emerald-100 text-emerald-700',
+      inactive: 'bg-rose-100 text-rose-700',
+    }
+  },
+];
 
   return (
     <div className="flex">
