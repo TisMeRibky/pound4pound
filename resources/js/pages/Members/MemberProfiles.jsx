@@ -22,6 +22,15 @@ export default function MemberProfiles({ user }) {
     { key: 'status', label: 'Status' },
   ];
 
+  const fetchMembers = () => {
+    fetch('/api/members', {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    })
+      .then(res => res.json())
+      .then(data => setMembers(data.data))
+      .catch(err => console.error(err));
+  };
+
   return (
     <div className="flex">
       <main className="flex-1 p-5">

@@ -30,23 +30,31 @@ export default function CreateMember({ token, onSuccess }) {
 
       const data = await res.json();
 
-      if (!res.ok) {
-        setMessage(data.message || 'Error creating member');
-        return;
+    if (!res.ok) {
+      if (data.errors?.email) {
+        setMessage(data.errors.email[0]);
+      } else {
+        setMessage(data.message || 'Something went wrong.');
       }
+      return;
+    }
 
       setMessage('Member created successfully! ✅');
-      
+
       setFirstName('');
       setLastName('');
       setEmail('');
       setPhone('');
-      setStatus('Active');
+      setStatus('');
+
+        if (onSuccess) onSuccess();
+
     } catch (err) {
       console.error(err);
       setMessage('Server error. Check console.');
     }
   };
+  
 
   return (
     <div className="p-6 max-w-md mx-auto bg-white rounded shadow-md">
@@ -91,7 +99,6 @@ export default function CreateMember({ token, onSuccess }) {
         >
           <option value="Active">Active</option>
           <option value="Inactive">Inactive</option>
-          <option value="Premium">Premium</option>
         </select>
 
         <button
