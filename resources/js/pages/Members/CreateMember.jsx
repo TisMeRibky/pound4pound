@@ -36,7 +36,7 @@ export default function CreateMember({ token, onSuccess }) {
       }
 
       setMessage('Member created successfully! ✅');
-      // reset form
+      
       setFirstName('');
       setLastName('');
       setEmail('');

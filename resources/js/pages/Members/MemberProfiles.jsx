@@ -19,6 +19,7 @@ export default function MemberProfiles({ user }) {
     { key: 'last_name', label: 'Last Name' },
     { key: 'email', label: 'Email' },
     { key: 'phone', label: 'Phone' },
+    { key: 'status', label: 'Status' },
   ];
 
   return (
