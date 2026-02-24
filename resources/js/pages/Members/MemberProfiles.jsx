@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CreateMember from './CreateMember'; 
 import DataTable from '../../components/DataTable';
 
 export default function MemberProfiles({ user }) {
   const [members, setMembers] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('/api/members', {
@@ -15,10 +17,10 @@ export default function MemberProfiles({ user }) {
   }, []);
 
   const columns = [
-  { key: 'first_name', label: 'First Name' },
-  { key: 'last_name', label: 'Last Name' },
-  { key: 'email', label: 'Email' },
-  { key: 'phone', label: 'Phone' },
+    { key: 'first_name', label: 'First Name' },
+    { key: 'last_name', label: 'Last Name' },
+    { key: 'email', label: 'Email' },
+    { key: 'phone', label: 'Phone' },
   {
     key: 'status',
     label: 'Status',
@@ -28,7 +30,7 @@ export default function MemberProfiles({ user }) {
       inactive: 'bg-rose-100 text-rose-700',
     }
   },
-];
+  ];
 
   const fetchMembers = () => {
     fetch('/api/members', {
@@ -53,7 +55,12 @@ export default function MemberProfiles({ user }) {
         </div>
 
         {/* Reusable table */}
-        <DataTable data={members} columns={columns} itemsPerPage={10} />
+        <DataTable 
+          data={members} 
+          columns={columns} 
+          itemsPerPage={10} 
+          onRowClick={(row) => navigate(`/members/${row.id}`)}
+        />
 
         {/* Modal Pop-up for CreateMember */}
         {showForm && (

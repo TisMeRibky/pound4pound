@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export default function DataTable({ data, columns, itemsPerPage = 10 }) {
+export default function DataTable({ data, columns, itemsPerPage = 10, onRowClick }) {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -30,8 +30,11 @@ export default function DataTable({ data, columns, itemsPerPage = 10 }) {
         <tbody className="divide-y divide-gray-200">
           {currentData.map((row, idx) => (
             <tr
-              key={row.id || idx}
-              className="hover:bg-blue-50 transition duration-200"
+              key={row.id}
+              onClick={() => onRowClick && onRowClick(row)}
+              className={`border-b ${
+                onRowClick ? 'cursor-pointer hover:bg-gray-100 transition' : ''
+              }`}
             >
               {columns.map((col) => (
                 <td

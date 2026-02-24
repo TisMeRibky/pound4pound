@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import Programs from './pages/Programs';
 import Plans from './pages/Plans';
 import MemberProfiles from './pages/Members/MemberProfiles';
+import MemberProfile from './pages/Members/MemberProfile';
 import Memberships from './pages/Members/Memberships';
 import TrainingSubs from './pages/Members/TrainingSubs';
 import Payments from './pages/Members/Payments';
@@ -98,6 +99,8 @@ function App() {
       <Route path="/memberships" element={<Memberships user={user} />} />
       <Route path="/trainingsubs" element={<TrainingSubs user={user} />} />
       <Route path="/payments" element={<Payments user={user} />} />
+
+      <Route path="/members/:id" element={<MemberProfile user={user} />} />
     </Route>
   </Routes>
   );
