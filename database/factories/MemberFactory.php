@@ -16,7 +16,7 @@ class MemberFactory extends Factory
             'last_name' => $this->faker->lastName(),
             'email' => $this->faker->unique()->safeEmail(),
             'phone' => $this->faker->phoneNumber(),
-            'status' => $this->faker->randomElement(['Basic', 'Premium', 'VIP']),
+            'status' => $this->faker->randomElement(['Active', 'Inactive']),
         ];
     }
 }
