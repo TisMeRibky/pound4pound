@@ -20,7 +20,7 @@ export default function MemberProfiles({ user }) {
     { key: 'first_name', label: 'First Name' },
     { key: 'last_name', label: 'Last Name' },
     { key: 'email', label: 'Email' },
-    { key: 'phone', label: 'Phone' },
+    { key: 'phone', label: 'Phone', sortable: false },
   {
     key: 'status',
     label: 'Status',
@@ -28,6 +28,7 @@ export default function MemberProfiles({ user }) {
     badgeColors: { /* badge color classes based on status value */
       active: 'bg-emerald-100 text-emerald-700',
       inactive: 'bg-rose-100 text-rose-700',
+    searchable: false,
     }
   },
   ];
@@ -45,10 +46,10 @@ export default function MemberProfiles({ user }) {
     <div className="flex">
       <main className="flex-1 p-5">
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold">Member Profiles</h1>
+          <h1 className="text-2xl font-bold leading-none">Member Profiles</h1>
           <button
             onClick={() => setShowForm(true)}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+            className="bg-[#03023B] text-white px-4 h-10 flex items-center justify-center rounded hover:text-black hover:bg-[#FFDE59] mt-5"
           >
             Add Member
           </button>
