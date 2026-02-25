@@ -39,7 +39,7 @@ export default function CreateMember({ token, onSuccess }) {
       return;
     }
 
-      setMessage('Member created successfully! ✅');
+      setMessage('Member created successfully!');
 
       setFirstName('');
       setLastName('');
@@ -57,7 +57,7 @@ export default function CreateMember({ token, onSuccess }) {
   
 
   return (
-    <div className="p-6 max-w-md mx-auto bg-white rounded shadow-md">
+    <div className=" font-verdana p-6 max-w-md mx-auto bg-white rounded shadow-md">
       <h2 className="text-xl font-bold mb-4">Create New Member</h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
@@ -103,7 +103,7 @@ export default function CreateMember({ token, onSuccess }) {
 
         <button
           type="submit"
-          className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition"
+          className="bg-[#03023B] text-white py-2 rounded hover:text-black hover:bg-[#FFDE59] transition"
         >
           Create Member
         </button>

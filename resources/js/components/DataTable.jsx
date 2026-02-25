@@ -35,7 +35,7 @@ export default function DataTable({
   );
 }, [data, searchTerm, columns]);
 
-  // SORTING * to disable sorting for a column, set `searchable: false` in the column definition * -Kirby
+  // SORTING * to disable sorting for a column, set `searchable: false` in the column definition *
   const sortedData = useMemo(() => {
     if (!sortConfig) return filteredData;
 
@@ -99,7 +99,7 @@ export default function DataTable({
         )}
       </div>
 
-      <table className="min-w-full bg-white rounded-2xl shadow-lg overflow-hidden">
+      <table className="min-w-full font-verdana bg-white rounded-2xl shadow-lg overflow-hidden">
         <thead className="bg-[#E6E9F5] text-[#0B0F3B]">
           <tr>
             {columns.map((col) => (
@@ -119,7 +119,7 @@ export default function DataTable({
                     return { key: col.key, direction: "asc" };
                   });
                 }}
-                className={`px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider select-none ${
+                className={`px-6 py-3 font-verdana text-left text-sm font-semibold uppercase tracking-wider select-none ${
                   col.sortable === false
                     ? "cursor-default text-gray-400"
                     : "cursor-pointer"
