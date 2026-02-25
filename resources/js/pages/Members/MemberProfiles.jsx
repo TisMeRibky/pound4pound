@@ -50,11 +50,12 @@ export default function MemberProfiles({ user }) {
       <main className="flex-1 p-5">
         <div className="flex justify-between items-center mb-4">
           <h1 style={{ fontFamily: 'var(--font-verdana)' }} className="text-2xl font-bold leading-none">Member Profiles</h1>
+          
           <button
-  onClick={() => setShowForm(true)}
-  className="bg-[#03023B] font-verdana text-white px-4 h-10 flex items-center justify-center rounded mt-5 gap-2 relative group hover:text-black hover:bg-[#FFDE59]"
->
-  Add Member
+            onClick={() => setShowForm(true)}
+            className="bg-[#03023B] font-verdana text-white px-4 h-10 flex items-center justify-center rounded mt-5 gap-2 relative group hover:text-black hover:bg-[#FFDE59]"
+          >
+    Add Member
   <span className="w-5 h-5 relative inline-block">
     <img
       src={white_circle}
@@ -66,9 +67,9 @@ export default function MemberProfiles({ user }) {
       alt="black circle"
       className="absolute top-0 left-0 w-5 h-5 opacity-0 group-hover:opacity-100"
     />
-  </span>
-</button>
-        </div>
+        </span>
+      </button>
+    </div>
 
         {/* Reusable table */}
         <DataTable 

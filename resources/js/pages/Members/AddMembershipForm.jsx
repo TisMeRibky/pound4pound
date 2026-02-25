@@ -60,46 +60,56 @@ export default function AddMembershipForm({ onClose }) {
     };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
-      <div className="bg-white rounded-lg w-full max-w-md p-6 relative shadow-lg">
-        <button
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold"
-          onClick={onClose}
+  <div className="fixed inset-0 backdrop-blur-sm bg-black/20 flex justify-center items-center z-50">
+    <div className="font-verdana p-6 max-w-md w-full bg-white rounded shadow-md relative">
+
+      {/* Close Button */}
+      <button
+        className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold"
+        onClick={onClose}
+      >
+        ✖
+      </button>
+
+      <h2 className="text-xl font-bold mb-4">Add Membership</h2>
+
+      <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
+
+        <select
+          value={selectedMemberId}
+          onChange={(e) => setSelectedMemberId(e.target.value)}
+          className="px-3 py-2 border rounded"
+          required
         >
-          ✖
+          <option value="">Select a member</option>
+          {membersWithoutMembership.map(m => (
+            <option key={m.id} value={m.id}>
+              {m.first_name} {m.last_name}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          className="px-3 py-2 border rounded"
+        >
+          <option value="Annual">Annual</option>
+          <option value="Walk-in">Walk-in</option>
+        </select>
+
+        <button
+          type="submit"
+          className="bg-[#03023B] text-white py-2 rounded hover:text-black hover:bg-[#FFDE59] transition"
+        >
+          Add Membership
         </button>
+      </form>
 
-        <h2 className="text-xl font-bold mb-4">Add Membership</h2>
-
-        <form className="flex flex-col space-y-3" onSubmit={handleSubmit}>
-          <select
-            value={selectedMemberId}
-            onChange={(e) => setSelectedMemberId(e.target.value)}
-          >
-            <option value="">Select a member</option>
-            {membersWithoutMembership.map(m => (
-  <option key={m.id} value={m.id}>
-    {m.first_name} {m.last_name}
-  </option>
-))}
-          </select>
-
-          <select
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            className="border px-3 py-2 rounded w-full"
-          >
-            <option value="Annual">Annual</option>
-            <option value="Walk-in">Walk-in</option>
-          </select>
-
-          <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-            Add Membership
-          </button>
-        </form>
-
-        {message && <p className="text-green-600 mt-3">{message}</p>}
-      </div>
+      {message && (
+        <p className="mt-3 text-center text-green-600">{message}</p>
+      )}
     </div>
-  );
+  </div>
+);
 }
