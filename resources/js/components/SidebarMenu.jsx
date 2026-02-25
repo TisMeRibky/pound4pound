@@ -11,7 +11,7 @@ export default function SidebarMenu({ onLogout }) {
   const [open, setOpen] = useState(currentPath.startsWith('/member')); // open dropdown if on member page
 
   const menuItem =
-    'font-bebas text-2xl my-2 px-3 py-2 rounded cursor-pointer text-white hover:text-black hover:bg-[#FFDE59]';
+    'font-bebas text-2xl my-2 px-3 py-2 rounded cursor-pointer';
   const subItem =
     'font-bebas text-xl my-2 ml-4 cursor-pointer text-sm rounded px-2 py-1 flex items-center';
 
