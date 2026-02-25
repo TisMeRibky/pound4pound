@@ -44,4 +44,17 @@ class MemberController extends Controller
         $member->delete();
         return response()->json(null, 204);
     }
+
+    //MEMBERSHIPS
+
+public function indexMembership(Request $request)
+{
+    $members = Member::where('status', 'Active')
+        ->whereDoesntHave('membership')
+        ->get(['id', 'first_name', 'last_name', 'status']);
+
+    \Log::info('Members without membership:', $members->toArray()); // <-- logs to storage/logs/laravel.log
+
+    return response()->json(['data' => $members]);
+}
 }
