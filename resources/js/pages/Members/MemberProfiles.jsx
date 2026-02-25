@@ -16,6 +16,15 @@ export default function MemberProfiles({ user }) {
       .then(data => setMembers(data.data));
   }, []);
 
+    const fetchMembers = () => {
+    fetch('/api/members', {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    })
+      .then(res => res.json())
+      .then(data => setMembers(data.data))
+      .catch(err => console.error(err));
+  };
+
   const columns = [
     { key: 'first_name', label: 'First Name' },
     { key: 'last_name', label: 'Last Name' },
@@ -32,15 +41,6 @@ export default function MemberProfiles({ user }) {
     }
   },
   ];
-
-  const fetchMembers = () => {
-    fetch('/api/members', {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-    })
-      .then(res => res.json())
-      .then(data => setMembers(data.data))
-      .catch(err => console.error(err));
-  };
 
   return (
     <div className="flex">

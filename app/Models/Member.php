@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Member extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'first_name',
         'last_name',
@@ -16,4 +16,11 @@ class Member extends Model
         'phone',
         'status',
     ];
+
+    public function membership()
+    {
+        return $this->hasOne(Membership::class);
+    }
+
 }
+
