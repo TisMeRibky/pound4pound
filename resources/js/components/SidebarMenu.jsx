@@ -1,38 +1,59 @@
 import logout from '@/assets/Logout.svg';
 import logo from '@/assets/Logo.svg';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 
 export default function SidebarMenu({ onLogout }) {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
+  const location = useLocation(); // get current path
+  const currentPath = location.pathname;
+
+  const [open, setOpen] = useState(currentPath.startsWith('/member')); // open dropdown if on member page
 
   const menuItem =
-  'font-bebas text-2xl my-2 pl-0 pr-3 py-2 rounded-r-lg cursor-pointer text-white hover:text-black hover:bg-[#FFDE59]';
-
+    'font-bebas text-2xl my-2 px-3 py-2 rounded cursor-pointer';
   const subItem =
-    'font-bebas text-xl my-2 ml-4 cursor-pointer text-sm text-white hover:text-black hover:bg-[#FFDE59] rounded px-2 py-1';
+    'font-bebas text-xl my-2 ml-4 cursor-pointer text-sm rounded px-2 py-1 flex items-center';
+
+  // Helper function for active state
+  const isActive = (path) => currentPath === path;
+  const isDropdownActive = (paths) => paths.some((p) => currentPath === p);
 
   return (
     <div className="flex flex-col h-screen">
-      <img src={logo} alt="Pound for Pound Fitness" className="mb-6 h-20"/>
+      <img src={logo} alt="Pound for Pound Fitness" className="mb-6 h-20" />
 
       <ul className="flex flex-col flex-1">
-        <li className={menuItem} onClick={() => navigate('/dashboard')}>
+        {/* Main Menu Items */}
+        <li
+          className={`${menuItem} ${
+            isActive('/dashboard') ? 'text-black bg-[#FFDE59]' : 'text-white hover:text-black hover:bg-[#FFDE59]'
+          }`}
+          onClick={() => navigate('/dashboard')}
+        >
           Dashboard
         </li>
 
-        <li className={menuItem} onClick={() => navigate('/programs')}>
+        <li
+          className={`${menuItem} ${
+            isActive('/programs') ? 'text-black bg-[#FFDE59]' : 'text-white hover:text-black hover:bg-[#FFDE59]'
+          }`}
+          onClick={() => navigate('/programs')}
+        >
           Programs
         </li>
 
-        <li className={menuItem} onClick={() => navigate('/plans')}>
+        <li
+          className={`${menuItem} ${
+            isActive('/plans') ? 'text-black bg-[#FFDE59]' : 'text-white hover:text-black hover:bg-[#FFDE59]'
+          }`}
+          onClick={() => navigate('/plans')}
+        >
           Plans
         </li>
 
-        {/* Dropdown */}
-        <li
-          className={menuItem}
+       <li
+          className={`${menuItem} text-white hover:text-black hover:bg-[#FFDE59]`}
           onClick={() => setOpen(!open)}
         >
           Members {open ? '▼' : '▶'}
@@ -40,16 +61,44 @@ export default function SidebarMenu({ onLogout }) {
 
         {open && (
           <ul>
-            <li className={subItem} onClick={() => navigate('/memberprofiles')}>
+            <li
+              className={`${subItem} ${
+                isActive('/memberprofiles')
+                  ? 'text-black bg-[#FFDE59]'
+                  : 'text-white hover:text-black hover:bg-[#FFDE59]'
+              }`}
+              onClick={() => navigate('/memberprofiles')}
+            >
               Member Profile
             </li>
-            <li className={subItem} onClick={() => navigate('/memberships')}>
+            <li
+              className={`${subItem} ${
+                isActive('/memberships')
+                  ? 'text-black bg-[#FFDE59]'
+                  : 'text-white hover:text-black hover:bg-[#FFDE59]'
+              }`}
+              onClick={() => navigate('/memberships')}
+            >
               Membership
             </li>
-            <li className={subItem} onClick={() => navigate('/trainingsubs')}>
+            <li
+              className={`${subItem} ${
+                isActive('/trainingsubs')
+                  ? 'text-black bg-[#FFDE59]'
+                  : 'text-white hover:text-black hover:bg-[#FFDE59]'
+              }`}
+              onClick={() => navigate('/trainingsubs')}
+            >
               Training Subs.
             </li>
-            <li className={subItem} onClick={() => navigate('/payments')}>
+            <li
+              className={`${subItem} ${
+                isActive('/payments')
+                  ? 'text-black bg-[#FFDE59]'
+                  : 'text-white hover:text-black hover:bg-[#FFDE59]'
+              }`}
+              onClick={() => navigate('/payments')}
+            >
               Payments
             </li>
           </ul>

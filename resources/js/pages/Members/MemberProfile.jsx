@@ -57,7 +57,7 @@ export default function MemberProfile({ onSuccess }) {
         return;
       }
       setMember(data);
-      setMessage('Member updated successfully! ✅');
+      setMessage('Member updated successfully!');
 
       setTimeout(() => setMessage(''), 3000);
 
