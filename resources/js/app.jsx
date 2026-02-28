@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import Programs from './pages/Programs';
+import Programs from './pages/Programs/Programs';
 import Plans from './pages/Plans';
 import MemberProfiles from './pages/Members/MemberProfiles';
 import MemberProfile from './pages/Members/MemberProfile';

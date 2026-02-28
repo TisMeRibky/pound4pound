@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\API\MemberController;
 use App\Http\Controllers\API\MembershipController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\ProgramController;
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
@@ -21,6 +22,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('members', MemberController::class);
     Route::get('memberships', [MembershipController::class, 'index']);
     Route::post('/memberships', [MembershipController::class, 'store']);
+
+    // Program CRUD
+    Route::apiResource('programs', ProgramController::class);
 });
 
 
