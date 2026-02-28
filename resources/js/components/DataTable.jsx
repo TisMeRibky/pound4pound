@@ -196,7 +196,9 @@ export default function DataTable({
                       {row[col.key]}
                     </span>
                   ) : (
-                    row[col.key]
+                    typeof row[col.key] === "string" && row[col.key].length > 60
+                        ? row[col.key].slice(0, 60) + "..."
+                        : row[col.key]
                   )}
                 </td>
               ))}
