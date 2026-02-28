@@ -30,7 +30,21 @@ class MemberController extends Controller
 
     public function show(Member $member)
     {
-        return response()->json($member);
+        $member->load('membership'); // eager load membership relation
+
+        return response()->json([
+            'id' => $member->id,
+            'first_name' => $member->first_name,
+            'last_name' => $member->last_name,
+            'email' => $member->email,
+            'phone' => $member->phone,
+            'status' => $member->status,
+            'membership' => $member->membership ? [
+                'type' => $member->membership->type,
+                'start_date' => $member->membership->start_date,
+                'end_date' => $member->membership->end_date,
+            ] : null
+        ]);
     }
 
     public function update(Request $request, Member $member)

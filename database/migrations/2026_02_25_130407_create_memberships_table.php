@@ -17,9 +17,12 @@ return new class extends Migration
             $table->foreignId('member_id')
                 ->constrained()
                 ->onDelete('cascade')
-                ->unique(); 
+                ->unique();
 
             $table->string('type'); 
+
+            $table->date('start_date'); 
+            $table->date('end_date')->nullable(); 
 
             $table->timestamps();
         });
@@ -30,6 +33,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('memberships');
+        Schema::table('memberships', function (Blueprint $table) {
+            $table->dropColumn(['start_date', 'end_date']);
+        });
     }
 };
