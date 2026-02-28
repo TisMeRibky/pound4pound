@@ -107,11 +107,23 @@ export default function MemberProfile({ onSuccess }) {
         ← Back to Members
       </button>
 
+      {message && (
+        <p className="text-green-600 mb-4 text-center">{message}</p>
+      )}
+
       <h1 className="text-2xl font-bold mb-2">{member.first_name} {member.last_name}</h1>
       <p className="text-gray-600 mb-4">Status: {member.status}</p>
 
-      {message && (
-        <p className="text-green-600 mb-4 text-center">{message}</p>
+      <p>Email: {member.email}</p>
+      <p>Phone: {member.phone}</p>
+
+      {member.membership && (
+        <div className="border-t pt-3 mt-3 space-y-1">
+          <h2 className="font-semibold">Membership Details</h2>
+          <p>Type: {member.membership.type === 'walk-in' ? 'Walk-in' : 'Annual'}</p>
+          <p>Start Date: {new Date(member.membership.start_date).toLocaleDateString()}</p>
+          <p>End Date: {member.membership.end_date ? new Date(member.membership.end_date).toLocaleDateString() : '-'}</p>
+        </div>
       )}
 
       {isEditing ? (
@@ -164,8 +176,6 @@ export default function MemberProfile({ onSuccess }) {
         </form>
       ) : (
         <div className="space-y-2">
-          <p>Email: {member.email}</p>
-          <p>Phone: {member.phone}</p>
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-3"
             onClick={() => setIsEditing(true)}

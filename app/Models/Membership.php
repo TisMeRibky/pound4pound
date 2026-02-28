@@ -10,10 +10,14 @@ class Membership extends Model
     protected $fillable = [
         'member_id',
         'type',
+        'start_date',
+        'end_date',
     ];
 
-    const TYPE_ANNUAL = 'Annual';
-    const TYPE_WALKIN = 'Walk-ins';
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+    ];
 
     public function member()
     {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Membership;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class MembershipController extends Controller
 {
@@ -15,9 +16,12 @@ class MembershipController extends Controller
             ->map(function ($membership) {
                 return [
                     'id' => $membership->id,
+                    'member_id' => $membership->member->id,
                     'member_name' => $membership->member->first_name . ' ' . $membership->member->last_name,
                     'type' => $membership->type,
                     'status' => $membership->member->status,
+                    'start_date' => $membership->start_date?->format('Y-m-d'),
+                    'end_date' => $membership->end_date?->format('Y-m-d'),
                     'created_at' => $membership->created_at->format('Y-m-d'),
                 ];
             });
@@ -27,19 +31,25 @@ class MembershipController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'member_id' => 'required|exists:members,id|unique:memberships,member_id',
-            'type' => 'required|in:Annual,Walk-in',
+        $validated = $request->validate([
+            'member_id' => 'required|exists:members,id',
+            'type' => 'required|in:annual,walk-in',
+            'start_date' => 'required|date',
         ]);
 
-        $membership = Membership::create([
-            'member_id' => $request->member_id,
-            'type' => $request->type,
+        $endDate = null;
+
+        if ($validated['type'] === 'annual') {
+            $endDate = Carbon::parse($validated['start_date'])->addYear()->format('Y-m-d');
+        }
+
+        Membership::create([
+            'member_id' => $validated['member_id'],
+            'type' => $validated['type'],
+            'start_date' => $validated['start_date'],
+            'end_date' => $endDate,
         ]);
 
-        return response()->json([
-            'message' => 'Membership created successfully!',
-            'data' => $membership
-        ]);
+        return response()->json(['message' => 'Membership created']);
     }
 }

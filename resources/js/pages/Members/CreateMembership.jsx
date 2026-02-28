@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-export default function AddMembershipForm({ onClose }) {
+export default function CreateMembership({ onClose }) {
   const [selectedMemberId, setSelectedMemberId] = useState('');
-  const [type, setType] = useState('Annual');
+  const [type, setType] = useState('annual');
   const [message, setMessage] = useState('');
   const [membersWithoutMembership, setMembersWithoutMembership] = useState([]);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   // Fetch members who are active and have no memberships yet
   useEffect(() => {
@@ -18,6 +20,18 @@ export default function AddMembershipForm({ onClose }) {
     .then(data => setMembersWithoutMembership(data.data || []))
     .catch(err => console.error(err));
   }, []);
+
+  useEffect(() => {
+    if (type === 'annual' && startDate) {
+      const start = new Date(startDate);
+      const end = new Date(start);
+      end.setFullYear(end.getFullYear() + 1);
+
+      setEndDate(end.toISOString().split('T')[0]);
+    } else {
+      setEndDate('');
+    }
+  }, [type, startDate]);
 
     const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,6 +47,7 @@ export default function AddMembershipForm({ onClose }) {
         body: JSON.stringify({
             member_id: selectedMemberId,
             type,
+            start_date: startDate,
         }),
         });
 
@@ -94,9 +109,26 @@ export default function AddMembershipForm({ onClose }) {
           onChange={(e) => setType(e.target.value)}
           className="px-3 py-2 border rounded"
         >
-          <option value="Annual">Annual</option>
-          <option value="Walk-in">Walk-in</option>
+          <option value="annual">Annual</option>
+          <option value="walk-in">Walk-in</option>
         </select>
+
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          className="px-3 py-2 border rounded"
+          required
+        />
+
+        {type === 'annual' && startDate && (
+          <input
+            type="date"
+            value={endDate}
+            readOnly
+            className="px-3 py-2 border rounded bg-gray-100"
+          />
+        )}
 
         <button
           type="submit"

@@ -37,7 +37,7 @@ export default function MemberProfiles({ user }) {
     key: 'status',
     label: 'Status',
     type: 'badge',
-    badgeColors: { /* badge color classes based on status value */
+    badgeColors: {
       active: 'bg-emerald-100 text-emerald-700',
       inactive: 'bg-rose-100 text-rose-700',
     searchable: false,
