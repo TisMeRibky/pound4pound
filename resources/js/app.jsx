@@ -6,7 +6,9 @@ import Layout from './components/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Programs from './pages/Programs/Programs';
-import Plans from './pages/Plans';
+import Plans from './pages/Plans/Plans';
+import CreatePlan from './pages/Plans/CreatePlan';
+import PlanProfile from './pages/Plans/PlanProfile';
 import MemberProfiles from './pages/Members/MemberProfiles';
 import MemberProfile from './pages/Members/MemberProfile';
 import Memberships from './pages/Members/Memberships';
@@ -93,13 +95,18 @@ function App() {
       }
     >
       <Route path="/dashboard" element={<Dashboard user={user} />} />
+
+      {/* Programs */}
       <Route path="/programs" element={<Programs user={user} />} />
+
+      {/* Plans */}
       <Route path="/plans" element={<Plans user={user} />} />
+      
+      {/* Members */}
       <Route path="/memberprofiles" element={<MemberProfiles user={user} />} />
       <Route path="/memberships" element={<Memberships user={user} />} />
       <Route path="/trainingsubs" element={<TrainingSubs user={user} />} />
       <Route path="/payments" element={<Payments user={user} />} />
-
       <Route path="/members/:id" element={<MemberProfile user={user} />} />
     </Route>
   </Routes>

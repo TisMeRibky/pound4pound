@@ -181,24 +181,21 @@ export default function DataTable({
               }`}
             >
               {columns.map((col) => (
-                <td
-                  key={col.key}
-                  className="px-6 py-3 text-sm text-gray-600"
-                >
+                <td key={col.key} className="px-6 py-3 text-sm text-gray-600">
                   {col.type === "badge" ? (
                     <span
                       className={`px-3 py-1 text-sm font-medium rounded-full ${
-                        col.badgeColors?.[
-                          row[col.key]?.toLowerCase()
-                        ] || "bg-gray-100 text-gray-700"
+                        col.badgeColors?.[String(row[col.key]).toLowerCase()] || "bg-gray-100 text-gray-700"
                       }`}
                     >
                       {row[col.key]}
                     </span>
+                  ) : col.render ? (
+                    col.render(row)
+                  ) : typeof row[col.key] === "string" && row[col.key].length > 60 ? (
+                    row[col.key].slice(0, 60) + "..."
                   ) : (
-                    typeof row[col.key] === "string" && row[col.key].length > 60
-                        ? row[col.key].slice(0, 60) + "..."
-                        : row[col.key]
+                    row[col.key]
                   )}
                 </td>
               ))}
