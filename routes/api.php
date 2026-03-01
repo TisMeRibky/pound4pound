@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\API\MemberController;
+use App\Http\Controllers\API\PaymentController;
+
 use App\Http\Controllers\API\MembershipController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\ProgramController;
-use App\Http\Controllers\API\PlanController;
+
+use Illuminate\Support\Facades\Route;
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
@@ -17,17 +19,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 
+// PROGRAMS CRUD
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('programs', ProgramController::class);
+});
+
 // Member CRUD
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/members/no-membership', [MemberController::class, 'indexMembership']);    
     Route::apiResource('members', MemberController::class);
     Route::get('memberships', [MembershipController::class, 'index']);
     Route::post('/memberships', [MembershipController::class, 'store']);
-
-    // Plan CRUD
-    Route::apiResource('plans', PlanController::class);
-
-    // Program CRUD
-    Route::apiResource('programs', ProgramController::class);
+    Route::get('payments', [PaymentController::class, 'index']);
+    Route::post('/payments', [PaymentController::class, 'store']);
+    Route::get('/payments/{payment}', [PaymentController::class, 'show']); 
 });
-

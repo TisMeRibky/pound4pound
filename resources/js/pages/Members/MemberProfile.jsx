@@ -114,11 +114,10 @@ export default function MemberProfile({ onSuccess }) {
       <h1 className="text-2xl font-bold mb-2">{member.first_name} {member.last_name}</h1>
       <p className="text-gray-600 mb-4">Status: {member.status}</p>
 
-      <p>Email: {member.email}</p>
-      <p>Phone: {member.phone}</p>
-
-      {member.membership && (
+      {!isEditing && member.membership && (
         <div className="border-t pt-3 mt-3 space-y-1">
+          <p>Email: {member.email}</p>
+          <p>Phone: {member.phone}</p>
           <h2 className="font-semibold">Membership Details</h2>
           <p>Type: {member.membership.type === 'walk-in' ? 'Walk-in' : 'Annual'}</p>
           <p>Start Date: {new Date(member.membership.start_date).toLocaleDateString()}</p>

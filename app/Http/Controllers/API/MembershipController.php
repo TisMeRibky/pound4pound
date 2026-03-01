@@ -11,7 +11,7 @@ class MembershipController extends Controller
 {
     public function index()
     {
-        $memberships = Membership::with('member') // eager load related member
+        $memberships = Membership::with('member') 
             ->get()
             ->map(function ($membership) {
                 return [

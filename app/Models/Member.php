@@ -22,5 +22,9 @@ class Member extends Model
         return $this->hasOne(Membership::class);
     }
 
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
 }
 
