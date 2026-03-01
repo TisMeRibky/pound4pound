@@ -42,7 +42,7 @@ export default function CreateProgram({ token, onSuccess }) {
   };
 
   return (
-    <div className="font-verdana p-6 max-w-md mx-auto bg-white rounded shadow-md">
+    <div className="font-verdan">
       <h2 className="text-xl font-bold mb-4">Create New Program</h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
