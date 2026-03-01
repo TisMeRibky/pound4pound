@@ -7,14 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
-    use HasFactory;
-
+    
     protected $fillable = [
         'member_id',
         'amount',
         'payment_date',
         'proof',
         'payment_method',
+    ];
+
+    protected $casts = [
+        'payment_date' => 'date',
     ];
 
     public function member()

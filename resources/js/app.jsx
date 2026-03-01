@@ -12,6 +12,7 @@ import MemberProfile from './pages/Members/MemberProfile';
 import Memberships from './pages/Members/Memberships';
 import TrainingSubs from './pages/Members/TrainingSubs';
 import Payments from './pages/Members/Payments';
+import PaymentDetails from './pages/Members/PaymentDetails';
 
 function PrivateRoute({ user, loading, children }) {
   if (loading) return <div>Loading...</div>;
@@ -99,6 +100,7 @@ function App() {
       <Route path="/memberships" element={<Memberships user={user} />} />
       <Route path="/trainingsubs" element={<TrainingSubs user={user} />} />
       <Route path="/payments" element={<Payments user={user} />} />
+      <Route path="/payments/:id" element={<PaymentDetails />} />
 
       <Route path="/members/:id" element={<MemberProfile user={user} />} />
     </Route>
