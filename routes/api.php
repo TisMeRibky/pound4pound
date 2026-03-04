@@ -6,6 +6,7 @@ use App\Http\Controllers\API\PaymentController;
 
 use App\Http\Controllers\API\MembershipController;
 use App\Http\Controllers\API\ProgramController;
+use App\Http\Controllers\API\PlanController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
 // PROGRAMS CRUD
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('programs', ProgramController::class);
+    Route::apiResource('plans', PlanController::class);
 });
 
 // Member CRUD
