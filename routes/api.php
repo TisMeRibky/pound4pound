@@ -27,16 +27,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('programs/{id}', [ProgramController::class, 'show']);
     Route::put('programs/{id}', [ProgramController::class, 'update']);
     Route::delete('programs/{id}', [ProgramController::class, 'destroy']);
+});
+
+// PLANS CRUD
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('plans', [PlanController::class, 'index']);
     Route::post('plans', [PlanController::class, 'store']);
     Route::get('plans/{id}', [PlanController::class, 'show']);
     Route::put('plans/{id}', [PlanController::class, 'update']);
     Route::delete('plans/{id}', [PlanController::class, 'destroy']);
-});
-
-// PLANS CRUD
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('plans', PlanController::class);
 });
 
 // Member CRUD
