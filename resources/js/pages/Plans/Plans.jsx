@@ -34,9 +34,20 @@ export default function Plans({ user }) {
   { key: 'duration', label: 'Duration', searchable: false },
   { key: 'price', label: 'Price', searchable: false },
   { key: 'is_promo', label: 'Promo', searchable: false, render: row => (row.is_promo ? 'Yes' : 'No') },
-  { key: 'promo_start_date_display', label: 'Promo Start', searchable: false },
-  { key: 'promo_end_date_display', label: 'Promo End', searchable: false },
-  { key: 'max_slots', label: 'Max Slots', searchable: false, render: row => row.is_promo ? row.max_slots : "-" },
+  {
+    key: 'promo_details',
+    label: 'Promo Details',
+    searchable: false,
+    render: row => row.is_promo
+      ? (
+        <div className="text-sm">
+          <div><span className="font-medium">Start:</span> {row.promo_start_date_display}</div>
+          <div><span className="font-medium">End:</span> {row.promo_end_date_display}</div>
+          <div><span className="font-medium">Slots:</span> {row.max_slots}</div>
+        </div>
+      )
+      : <span className="text-gray-400">—</span>,
+  },
   {
     key: 'is_active',
     label: 'Status',
@@ -108,7 +119,7 @@ export default function Plans({ user }) {
             duration: `${plan.duration_days} days`,
             price: plan.price.toFixed(2),
             is_promo: plan.is_promo === true || plan.is_promo === 1 || plan.is_promo === "1",
-            is_active: plan.is_active ? 'Active' : 'Inactive', // this is for the table display
+            is_active: plan.is_active ? 'Active' : 'Inactive', 
             promo_start_date: plan.promo_start_date,
             promo_start_date_display: plan.promo_start_date ? new Date(plan.promo_start_date).toLocaleDateString() : "-",
             promo_end_date: plan.promo_end_date,
@@ -118,8 +129,8 @@ export default function Plans({ user }) {
           itemsPerPage={10}
           onRowClick={(row) => setSelectedPlan({
             ...row,
-            is_active: row.is_active === 'Active', // <-- convert back to boolean for PlanProfile
-            is_promo: !!row.is_promo,              // optional: ensure boolean for promo too
+            is_active: row.is_active === 'Active', 
+            is_promo: !!row.is_promo,              
           })}
         />
       </main>

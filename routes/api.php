@@ -3,7 +3,6 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\API\MemberController;
 use App\Http\Controllers\API\PaymentController;
-
 use App\Http\Controllers\API\MembershipController;
 use App\Http\Controllers\API\ProgramController;
 use App\Http\Controllers\API\PlanController;
@@ -33,6 +32,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('plans/{id}', [PlanController::class, 'show']);
     Route::put('plans/{id}', [PlanController::class, 'update']);
     Route::delete('plans/{id}', [PlanController::class, 'destroy']);
+});
+
+// PLANS CRUD
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('plans', PlanController::class);
 });
 
 // Member CRUD
