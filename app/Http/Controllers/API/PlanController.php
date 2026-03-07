@@ -13,11 +13,13 @@ class PlanController extends Controller
      */
     public function index()
     {
-        $plans = Plan::with('program')->get();
-
-        return response()->json([
-            'data' => $plans
-        ]);
+        try {
+            $plans = Plan::with('program')->get();
+            return response()->json(['data' => $plans]);
+        } catch (\Exception $e) {
+            \Log::error('PlanController@index error: '.$e->getMessage());
+            return response()->json(['message' => 'Server error'], 500);
+        }
     }
 
     /**
@@ -26,7 +28,7 @@ class PlanController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'program_id' => 'required|exists:programs,program_id',
+            'program_id' => 'required|exists:programs,id',
             'name' => 'required|string|max:255',
             'duration_days' => 'required|integer|min:1',
             'price' => 'required|numeric|min:0',
@@ -37,7 +39,6 @@ class PlanController extends Controller
             'is_active' => 'required|boolean',
         ]);
 
-        // If not promo, clear promo fields
         if (!$validated['is_promo']) {
             $validated['promo_start_date'] = null;
             $validated['promo_end_date'] = null;

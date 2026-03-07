@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 export default function CreateTrainingSubs({ onClose }) {
   const [selectedMemberId, setSelectedMemberId] = useState('');
   const [selectedPlanId, setSelectedPlanId] = useState('');
+  const [startDate, setStartDate] = useState('');
   const [members, setMembers] = useState([]);
   const [plans, setPlans] = useState([]);
   const [message, setMessage] = useState('');
@@ -11,7 +12,7 @@ export default function CreateTrainingSubs({ onClose }) {
 
   // Fetch active members
   useEffect(() => {
-    fetch('/api/members?active=1', {
+    fetch('/api/members/with-membership', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.json())
@@ -43,6 +44,7 @@ export default function CreateTrainingSubs({ onClose }) {
         body: JSON.stringify({
           member_id: selectedMemberId,
           plan_id: selectedPlanId,
+          start_date: startDate
         }),
       });
 
@@ -103,6 +105,14 @@ export default function CreateTrainingSubs({ onClose }) {
               </option>
             ))}
           </select>
+
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="px-3 py-2 border rounded"
+            required
+          />
 
           <button
             type="submit"

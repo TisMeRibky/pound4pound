@@ -91,7 +91,7 @@ export default function CreatePlan({ token, onSuccess, onClose }) {
           >
             <option value="">Select Program</option>
             {programs.map((p) => (
-              <option key={p.program_id} value={p.program_id}>
+              <option key={p.id} value={p.id}>
                 {p.name}
               </option>
             ))}

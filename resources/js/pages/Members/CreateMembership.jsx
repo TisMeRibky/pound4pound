@@ -10,7 +10,7 @@ export default function CreateMembership({ onClose }) {
 
   // Fetch members who are active and have no memberships yet
   useEffect(() => {
-    fetch('/api/members/no-membership', {
+    fetch('/api/members/without-membership', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
         Accept: 'application/json'

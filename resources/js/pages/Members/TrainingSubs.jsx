@@ -14,7 +14,11 @@ export default function TrainingSubs() {
     fetch('/api/training-subscriptions', {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then(res => res.json())
+      .then(async res => {
+          const text = await res.text();
+          console.log("API RESPONSE:", text);
+          return JSON.parse(text);
+        })
       .then(data => setSubscriptions(data.data || []))
       .catch(err => console.error(err));
   };
@@ -31,9 +35,8 @@ export default function TrainingSubs() {
     { key: 'status', label: 'Status', type: 'badge', badgeColors: { active: 'bg-green-100 text-green-700', expired: 'bg-red-100 text-red-700' } },
   ];
 
-  // Map subscriptions for DataTable
   const tableData = subscriptions.map(sub => ({
-    id: sub.id, // ✅ unique key
+    id: sub.id, 
     member_name: sub.member ? `${sub.member.first_name} ${sub.member.last_name}` : 'Deleted Member',
     plan_name: sub.plan?.name || '-',
     start_date: sub.start_date || '-',

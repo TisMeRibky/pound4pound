@@ -61,14 +61,25 @@ class MemberController extends Controller
 
     //MEMBERSHIPS
 
-public function indexMembership(Request $request)
-{
-    $members = Member::where('status', 'Active')
-        ->whereDoesntHave('membership')
-        ->get(['id', 'first_name', 'last_name', 'status']);
+    public function withoutMembership(Request $request)
+    {
+        $members = Member::where('status', 'Active')
+            ->whereDoesntHave('membership')
+            ->get(['id', 'first_name', 'last_name', 'status']);
 
-    \Log::info('Members without membership:', $members->toArray()); // <-- logs to storage/logs/laravel.log
+        \Log::info('Members without membership:', $members->toArray()); // <-- logs to storage/logs/laravel.log
 
-    return response()->json(['data' => $members]);
-}
+        return response()->json(['data' => $members]);
+    }
+
+    public function withMembership()
+    {
+        $members = Member::where('status', 'Active')
+            ->whereHas('membership')
+            ->get(['id', 'first_name', 'last_name']);
+
+        return response()->json([
+            'data' => $members
+        ]);
+    }
 }
