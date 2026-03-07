@@ -7,8 +7,6 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Programs from './pages/Programs/Programs';
 import Plans from './pages/Plans/Plans';
-import CreatePlan from './pages/Plans/CreatePlan';
-import PlanProfile from './pages/Plans/PlanProfile';
 import MemberProfiles from './pages/Members/MemberProfiles';
 import MemberProfile from './pages/Members/MemberProfile';
 import Memberships from './pages/Members/Memberships';

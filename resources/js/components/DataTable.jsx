@@ -8,7 +8,10 @@ export default function DataTable({
   onRowClick,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortConfig, setSortConfig] = useState(null);
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: null
+  });
   const [searchTerm, setSearchTerm] = useState("");
 
   // Reset page when data or search changes
@@ -37,7 +40,7 @@ export default function DataTable({
 
   // SORTING * to disable sorting for a column, set `searchable: false` in the column definition *
   const sortedData = useMemo(() => {
-    if (!sortConfig) return filteredData;
+    if (!sortConfig.key) return filteredData;
 
     const sorted = [...filteredData].sort((a, b) => {
       const aValue = a[sortConfig.key];

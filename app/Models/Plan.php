@@ -37,4 +37,9 @@ class Plan extends Model
     {
         return $this->belongsTo(Program::class, 'program_id', 'program_id');
     }
+
+    public function trainingSubscriptions()
+    {
+        return $this->hasMany(TrainingSubscription::class);
+    }
 }
