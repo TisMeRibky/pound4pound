@@ -43,7 +43,6 @@ Route::middleware('auth:sanctum')->group(function () {
     //route to get subscriptions for a specific plan
     Route::get('plans/{id}/subscriptions', [PlanController::class, 'subscriptions']);
 });
-});
 
 // Member CRUD
 Route::middleware('auth:sanctum')->group(function () {

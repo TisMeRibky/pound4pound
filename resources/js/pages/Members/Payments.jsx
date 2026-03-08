@@ -4,8 +4,6 @@ import DataTable from '../../components/DataTable';
 import CreatePayment from './CreatePayment';
 import white_circle from '@/assets/plus-circle-white.svg';
 import black_circle from '@/assets/plus-circle-black.svg';
-import white_circle from '@/assets/plus-circle-white.svg';
-import black_circle from '@/assets/plus-circle-black.svg';
 
 export default function Payments({ user }) {
   const [payments, setPayments] = useState([]);
