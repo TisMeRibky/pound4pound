@@ -26,8 +26,8 @@ export default function Memberships() {
   const columns = [
     { key: 'member_name', label: 'Member Name' },
     { key: 'type', label: 'Membership Type' },
-    { key: 'status', label: 'Status' },
     { key: 'created_at', label: 'Joined On' },
+    { key: 'status', label: 'Status', type: 'badge', badgeColors: { active: 'bg-green-100 text-green-700', expired: 'bg-red-100 text-red-700' } },
   ];
 
   return (

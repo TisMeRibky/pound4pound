@@ -1,7 +1,5 @@
 <?php
 
-// app/Console/Commands/SendMembershipExpiryReminders.php
-
 namespace App\Console\Commands;
 
 use App\Mail\MembershipExpiringSoon;

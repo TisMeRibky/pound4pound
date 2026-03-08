@@ -12,13 +12,17 @@ class PlanController extends Controller
      * Display a listing of plans
      */
     public function index()
-    {
-        $plans = Plan::with('program')->get();
-
-        return response()->json([
-            'data' => $plans
-        ]);
-    }
+        {
+            try {
+                $plans = Plan::with('program')
+                    ->withCount('trainingSubscriptions')  // adds training_subscriptions_count
+                    ->get();
+                return response()->json(['data' => $plans]);
+            } catch (\Exception $e) {
+                \Log::error('PlanController@index error: '.$e->getMessage());
+                return response()->json(['message' => 'Server error'], 500);
+            }
+        }
 
     /**
      * Store a newly created plan
@@ -26,7 +30,7 @@ class PlanController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'program_id' => 'required|exists:programs,program_id',
+            'program_id' => 'required|exists:programs,id',
             'name' => 'required|string|max:255',
             'duration_days' => 'required|integer|min:1',
             'price' => 'required|numeric|min:0',
@@ -37,7 +41,6 @@ class PlanController extends Controller
             'is_active' => 'required|boolean',
         ]);
 
-        // If not promo, clear promo fields
         if (!$validated['is_promo']) {
             $validated['promo_start_date'] = null;
             $validated['promo_end_date'] = null;
@@ -106,5 +109,27 @@ class PlanController extends Controller
         return response()->json([
             'message' => 'Plan deleted successfully.'
         ]);
+    }
+
+    /**
+     * Get subscriptions for a specific plan
+     */
+    public function subscriptions($id)
+    {
+        $plan = Plan::with(['trainingSubscriptions.member'])->findOrFail($id);
+
+        $subscribers = $plan->trainingSubscriptions->map(function ($sub) {
+            return [
+                'id' => $sub->id,
+                'member_name' => $sub->member
+                    ? $sub->member->first_name . ' ' . $sub->member->last_name
+                    : 'Deleted Member',
+                'start_date' => $sub->start_date?->format('Y-m-d'),
+                'end_date' => $sub->end_date?->format('Y-m-d'),
+                'status' => $sub->status,
+            ];
+        });
+
+        return response()->json(['data' => $subscribers]);
     }
 }

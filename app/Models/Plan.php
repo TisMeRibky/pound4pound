@@ -9,8 +9,6 @@ class Plan extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'plan_id';
-
     protected $fillable = [
         'program_id',
         'name',
@@ -35,6 +33,11 @@ class Plan extends Model
 
     public function program()
     {
-        return $this->belongsTo(Program::class, 'program_id', 'program_id');
+        return $this->belongsTo(Program::class);
+    }
+
+    public function trainingSubscriptions()
+    {
+        return $this->hasMany(TrainingSubscription::class);
     }
 }

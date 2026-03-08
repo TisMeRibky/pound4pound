@@ -58,6 +58,8 @@ export default function CreateMember({ token, onSuccess }) {
 
   return (
     <div className=" font-verdana">
+
+      
       <h2 className="text-xl font-bold mb-4">Create New Member</h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col space-y-3">

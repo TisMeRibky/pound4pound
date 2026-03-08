@@ -26,5 +26,10 @@ class Member extends Model
     {
         return $this->hasOne(Payment::class);
     }
+
+    public function trainingSubscriptions()
+    {
+        return $this->hasMany(TrainingSubscription::class);
+    }
 }
 
