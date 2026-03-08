@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function CreateMember({ token, onSuccess }) {
+export default function CreateMember({ token, onClose }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -28,90 +28,95 @@ export default function CreateMember({ token, onSuccess }) {
         }),
       });
 
-      const data = await res.json();
-
-    if (!res.ok) {
-      if (data.errors?.email) {
-        setMessage(data.errors.email[0]);
-      } else {
-        setMessage(data.message || 'Something went wrong.');
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        setMessage('Unexpected server response');
+        return;
       }
-      return;
-    }
 
-      setMessage('Member created successfully!');
+      if (!res.ok) {
+        setMessage(data?.message || 'Failed to create member');
+        return;
+      }
 
-      setFirstName('');
-      setLastName('');
-      setEmail('');
-      setPhone('');
-      setStatus('');
+      setMessage(data.message || 'Member created successfully!');
 
-        if (onSuccess) onSuccess();
+      setTimeout(() => onClose(), 1500);
 
     } catch (err) {
       console.error(err);
-      setMessage('Server error. Check console.');
+      setMessage('Server error');
     }
   };
   
 
   return (
-    <div className=" font-verdana">
-      <h2 className="text-xl font-bold mb-4">Create New Member</h2>
+  <div className="font-verdana">
+    <h2 className="text-xl font-bold mb-4">Create New Member</h2>
+    
+    {/* Close Button */}
+    <button
+      className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold"
+      onClick={onClose}
+    >
+      ✖
+    </button>
 
-      <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
-        <input
-          type="text"
-          placeholder="First Name"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          className="px-3 py-2 border rounded"
-          required
-        />
-        <input
-          type="text"
-          placeholder="Last Name"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          className="px-3 py-2 border rounded"
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="px-3 py-2 border rounded"
-          required
-        />
-        <input
-          type="text"
-          placeholder="Phone"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          className="px-3 py-2 border rounded"
-        />
-        <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          className="px-3 py-2 border rounded"
-        >
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-        </select>
+    <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
+      <input
+        type="text"
+        placeholder="First Name"
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
+        className="px-3 py-2 border rounded"
+        required
+      />
+      <input
+        type="text"
+        placeholder="Last Name"
+        value={lastName}
+        onChange={(e) => setLastName(e.target.value)}
+        className="px-3 py-2 border rounded"
+        required
+      />
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="px-3 py-2 border rounded"
+        required
+      />
+      <input
+        type="text"
+        placeholder="Phone"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+        className="px-3 py-2 border rounded"
+      />
+      <select
+        value={status}
+        onChange={(e) => setStatus(e.target.value)}
+        className="px-3 py-2 border rounded"
+      >
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select>
 
-        <button
-          type="submit"
-          className="bg-[#03023B] text-white py-2 rounded hover:text-black hover:bg-[#FFDE59] transition"
-        >
-          Create Member
-        </button>
-      </form>
+      <button
+        type="submit"
+        className="bg-[#03023B] text-white py-2 rounded hover:text-black hover:bg-[#FFDE59] transition"
+      >
+        Create Member
+      </button>
+    </form>
 
-      {message && (
-        <p className="mt-3 text-center text-green-600">{message}</p>
-      )}
-    </div>
+    {/* Message */}
+    {message && (
+      <p className="mt-3 text-center text-green-600 font-semibold">{message}</p>
+    )}
+  </div>
   );
 }

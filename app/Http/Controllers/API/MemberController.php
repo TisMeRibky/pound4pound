@@ -30,7 +30,10 @@ class MemberController extends Controller
 
     public function show(Member $member)
     {
-        $member->load('membership'); // eager load membership relation
+        $member->load([
+            'membership',
+            'trainingSubscriptions.plan.program'
+        ]);
 
         return response()->json([
             'id' => $member->id,
@@ -43,8 +46,28 @@ class MemberController extends Controller
                 'type' => $member->membership->type,
                 'start_date' => $member->membership->start_date,
                 'end_date' => $member->membership->end_date,
-            ] : null
+            ] : null,
+            'training_subscriptions' => $member->trainingSubscriptions->map(function($sub) {
+                return [
+                    'id' => $sub->id,
+                    'status' => $sub->status,
+                    'start_date' => $sub->start_date,
+                    'end_date' => $sub->end_date,
+                    'plan' => $sub->plan ? [
+                        'id' => $sub->plan->id,
+                        'name' => $sub->plan->name,
+                        'duration_days' => $sub->plan->duration_days,
+                        'price' => $sub->plan->price,
+                        'program' => $sub->plan->program ? [
+                            'id' => $sub->plan->program->id,
+                            'name' => $sub->plan->program->name,
+                        ] : null,
+                    ] : null,
+                ];
+            }),
         ]);
+
+        return response()->json(['message' => 'Member created']);
     }
 
     public function update(Request $request, Member $member)

@@ -113,17 +113,34 @@ export default function MemberProfile({ onSuccess }) {
 
       <h1 className="text-2xl font-bold mb-2">{member.first_name} {member.last_name}</h1>
       <p className="text-gray-600 mb-4">Status: {member.status}</p>
+      <p><strong>Email:</strong> {member.email}</p>
+      <p><strong>Phone:</strong> {member.phone}</p>
 
-      {!isEditing && member.membership && (
-        <div className="border-t pt-3 mt-3 space-y-1">
-          <p>Email: {member.email}</p>
-          <p>Phone: {member.phone}</p>
-          <h2 className="font-semibold">Membership Details</h2>
-          <p>Type: {member.membership.type === 'walk-in' ? 'Walk-in' : 'Annual'}</p>
-          <p>Start Date: {new Date(member.membership.start_date).toLocaleDateString()}</p>
-          <p>End Date: {member.membership.end_date ? new Date(member.membership.end_date).toLocaleDateString() : '-'}</p>
-        </div>
-      )}
+    {/* Membership Details */}
+    {!isEditing && member.membership && (
+      <div className="border p-2 rounded mt-3 space-y-2">
+        <h2 className="font-semibold mt-2">Membership Details</h2>
+        <p><strong>Type:</strong> {member.membership.type === 'walk-in' ? 'Walk-in' : 'Annual'}</p>
+        <p><strong>Start Date:</strong> {new Date(member.membership.start_date).toLocaleDateString()}</p>
+        <p><strong>End Date:</strong> {member.membership.end_date ? new Date(member.membership.end_date).toLocaleDateString() : '-'}</p>
+      </div>
+    )}
+
+    {/* Training Subscriptions */}
+    {!isEditing && member.training_subscriptions && member.training_subscriptions.length > 0 && (
+      <div className="pt-2 mt-3 space-y-2">
+        <h2 className="font-semibold">Training Subscriptions</h2>
+        {member.training_subscriptions.map(sub => (
+          <div key={sub.id} className="p-2 border rounded">
+            <p><strong>Plan:</strong> {sub.plan.name}</p>
+            <p><strong>Program:</strong> {sub.plan.program.name}</p>
+            <p><strong>Start Date:</strong> {new Date(sub.start_date).toLocaleDateString()}</p>
+            <p><strong>End Date:</strong> {new Date(sub.end_date).toLocaleDateString()}</p>
+            <p><strong>Status:</strong> {sub.status}</p>
+          </div>
+        ))}
+      </div>
+    )}
 
       {isEditing ? (
         <form className="space-y-3" onSubmit={handleUpdate}>

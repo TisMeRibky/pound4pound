@@ -64,7 +64,7 @@ export default function CreateMembership({ onClose }) {
         return;
         }
 
-        setMessage(data.message || 'Membership added successfully! ✅');
+        setMessage(data.message || 'Membership added successfully!');
 
         setTimeout(() => onClose(), 1500);
 
@@ -72,7 +72,7 @@ export default function CreateMembership({ onClose }) {
         console.error(err);
         setMessage('Server error');
     }
-    };
+  };
 
   return (
   <div className="fixed inset-0 backdrop-blur-sm bg-black/20 flex justify-center items-center z-50">

@@ -30,11 +30,6 @@ export default function Programs({ user }) {
 
   const columns = [
     {
-      key: "program_id",
-      label: "ID",
-      sortable: true,
-    },
-    {
       key: "name",
       label: "Program Name",
     },
