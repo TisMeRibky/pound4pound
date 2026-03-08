@@ -12,13 +12,9 @@ export default function TrainingSubs() {
 
   const fetchSubscriptions = () => {
     fetch('/api/training-subscriptions', {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     })
-      .then(async res => {
-          const text = await res.text();
-          console.log("API RESPONSE:", text);
-          return JSON.parse(text);
-        })
+      .then(res => res.json())
       .then(data => setSubscriptions(data.data || []))
       .catch(err => console.error(err));
   };

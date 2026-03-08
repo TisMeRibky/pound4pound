@@ -42,12 +42,12 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/members/without-membership', [MemberController::class, 'withoutMembership']);   
     Route::get('/members/with-membership', [MemberController::class, 'withMembership']);   
-    Route::apiResource('members', MemberController::class);
-    Route::get('memberships', [MembershipController::class, 'index']);
+    Route::apiResource('/members', MemberController::class);
+    Route::get('/memberships', [MembershipController::class, 'index']);
     Route::post('/memberships', [MembershipController::class, 'store']);
-    Route::get('payments', [PaymentController::class, 'index']);
+    Route::get('/payments', [PaymentController::class, 'index']);
     Route::post('/payments', [PaymentController::class, 'store']);
     Route::get('/payments/{payment}', [PaymentController::class, 'show']); 
-    Route::get('training-subscriptions', [TrainingSubscriptionController::class, 'index']);
-    Route::post('training-subscriptions', [TrainingSubscriptionController::class, 'store']);
+    Route::get('/training-subscriptions', [TrainingSubscriptionController::class, 'index']);
+    Route::post('/training-subscriptions', [TrainingSubscriptionController::class, 'store']);
 });
