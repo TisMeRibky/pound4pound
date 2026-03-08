@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function CreateProgram({ token, onSuccess }) {
+export default function CreateProgram({ token, onSuccess, onClose }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [message, setMessage] = useState("");
@@ -42,7 +42,16 @@ export default function CreateProgram({ token, onSuccess }) {
   };
 
   return (
-    <div className="font-verdan">
+    <div className="fixed inset-0 backdrop-blur-sm bg-black/20 flex justify-center items-center z-50">
+      <div className="font-verdana p-6 max-w-md w-full bg-white rounded shadow-md relative">
+
+        {/* Close Button */}
+        <button
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold"
+          onClick={onClose}
+        >
+          ✖
+        </button>
       <h2 className="text-xl font-bold mb-4">Create New Program</h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
@@ -75,5 +84,6 @@ export default function CreateProgram({ token, onSuccess }) {
         <p className="mt-3 text-center text-green-600">{message}</p>
       )}
     </div>
+  </div>
   );
 }

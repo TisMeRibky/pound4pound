@@ -70,7 +70,9 @@ export default function CreatePlan({ token, onSuccess, onClose }) {
 
   return (
     <div className="fixed inset-0 backdrop-blur-sm bg-black/20 flex justify-center items-center z-50">
-      <div className="bg-white rounded-lg w-full max-w-md p-6 relative shadow-lg">
+      <div className="font-verdana p-6 max-w-md w-full bg-white rounded shadow-md relative">
+
+        {/* Close Button */}
         <button
           className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold"
           onClick={onClose}

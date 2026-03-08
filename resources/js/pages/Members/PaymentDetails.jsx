@@ -40,11 +40,11 @@ export default function PaymentDetails() {
           <strong>Proof of Payment:</strong>
           <div className="mt-2">
             {payment.proof.endsWith('.pdf') ? (
-              <a href={`/payments/${payment.proof}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+              <a href={`/proof/${payment.proof}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
                 View PDF
               </a>
             ) : (
-              <img src={`/payments/${payment.proof}`} alt="Proof" className="max-w-full h-auto border rounded" />
+              <img src={`/proof/${payment.proof}`} alt="Proof" className="max-w-full h-auto border rounded" />
             )}
           </div>
         </div>
