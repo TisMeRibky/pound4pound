@@ -48,7 +48,7 @@ class PaymentController extends Controller
 
             $filename = time() . '_' . $file->getClientOriginalName();
 
-            $file->move(public_path('payments'), $filename);
+            $file->move(public_path('proof'), $filename);
 
             $payment->proof = $filename;
         }   

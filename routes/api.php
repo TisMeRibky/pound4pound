@@ -31,23 +31,18 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // PLANS CRUD
 Route::middleware('auth:sanctum')->group(function () {
-});
-
-// PLANS CRUD
-Route::middleware('auth:sanctum')->group(function () {
     Route::get('plans', [PlanController::class, 'index']);
     Route::post('plans', [PlanController::class, 'store']);
     Route::get('plans/{id}', [PlanController::class, 'show']);
     Route::put('plans/{id}', [PlanController::class, 'update']);
     Route::delete('plans/{id}', [PlanController::class, 'destroy']);
-    //route to get subscriptions for a specific plan
     Route::get('plans/{id}/subscriptions', [PlanController::class, 'subscriptions']);
 });
 
 // Member CRUD
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/members/without-membership', [MemberController::class, 'withoutMembership']);   
-    Route::get('/members/with-membership', [MemberController::class, 'withMembership']);   
+    Route::get('members/without-membership', [MemberController::class, 'withoutMembership']);   
+    Route::get('members/with-membership', [MemberController::class, 'withMembership']);   
     Route::apiResource('/members', MemberController::class);
     Route::get('/memberships', [MembershipController::class, 'index']);
     Route::post('/memberships', [MembershipController::class, 'store']);
