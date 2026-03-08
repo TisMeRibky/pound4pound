@@ -64,6 +64,17 @@ class TrainingSubscriptionController extends Controller
             ], 400);
         }
 
+        
+        if ($plan->is_promo && $plan->max_slots !== null) {
+            $currentCount = TrainingSubscription::where('plan_id', $plan->id)->count();
+
+            if ($currentCount >= $plan->max_slots) {
+                return response()->json([
+                    'message' => 'This plan has reached its maximum number of slots.'
+                ], 422);
+            }
+        }
+
         $existingSubscription = \App\Models\TrainingSubscription::where('member_id', $member->id)
             ->where('plan_id', $plan->id)
             ->first();

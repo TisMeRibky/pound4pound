@@ -37,7 +37,7 @@ export default function TrainingSubs() {
     plan_name: sub.plan?.name || '-',
     start_date: sub.start_date || '-',
     end_date: sub.end_date || '-',
-    status: sub.status || 'active',
+    status: sub.status ? sub.status.charAt(0).toUpperCase() + sub.status.slice(1) : 'Active',
   }));
 
   return (

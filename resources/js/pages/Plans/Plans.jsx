@@ -35,19 +35,21 @@ export default function Plans({ user }) {
   { key: 'price', label: 'Price', searchable: false },
   { key: 'is_promo', label: 'Promo', searchable: false, render: row => (row.is_promo ? 'Yes' : 'No') },
   {
-    key: 'promo_details',
-    label: 'Promo Details',
-    searchable: false,
-    render: row => row.is_promo
-      ? (
-        <div className="text-sm">
-          <div><span className="font-medium">Start:</span> {row.promo_start_date_display}</div>
-          <div><span className="font-medium">End:</span> {row.promo_end_date_display}</div>
-          <div><span className="font-medium">Slots:</span> {row.max_slots}</div>
+  key: 'promo_details',
+  label: 'Promo Details',
+  searchable: false,
+  render: row => row.is_promo
+    ? (
+      <div className="text-sm">
+        <div><span className="font-medium">Start:</span> {row.promo_start_date_display}</div>
+        <div><span className="font-medium">End:</span> {row.promo_end_date_display}</div>
+        <div>
+          <span className="font-medium">Slots:</span> {row.subscribed_count} / {row.max_slots}
         </div>
-      )
-      : <span className="text-gray-400">—</span>,
-  },
+      </div>
+    )
+    : <span className="text-gray-400">—</span>,
+},
   {
     key: 'is_active',
     label: 'Status',
@@ -119,7 +121,8 @@ export default function Plans({ user }) {
             duration: `${plan.duration_days} days`,
             price: plan.price.toFixed(2),
             is_promo: plan.is_promo === true || plan.is_promo === 1 || plan.is_promo === "1",
-            is_active: plan.is_active ? 'Active' : 'Inactive', 
+            is_active: plan.is_active ? 'Active' : 'Inactive',
+            subscribed_count: plan.training_subscriptions_count ?? 0,  // add this
             promo_start_date: plan.promo_start_date,
             promo_start_date_display: plan.promo_start_date ? new Date(plan.promo_start_date).toLocaleDateString() : "-",
             promo_end_date: plan.promo_end_date,

@@ -54,6 +54,8 @@ export default function CreateMember({ token, onClose }) {
 
   return (
   <div className="font-verdana">
+
+      
     <h2 className="text-xl font-bold mb-4">Create New Member</h2>
     
     {/* Close Button */}

@@ -4,6 +4,8 @@ import DataTable from '../../components/DataTable';
 import CreatePayment from './CreatePayment';
 import white_circle from '@/assets/plus-circle-white.svg';
 import black_circle from '@/assets/plus-circle-black.svg';
+import white_circle from '@/assets/plus-circle-white.svg';
+import black_circle from '@/assets/plus-circle-black.svg';
 
 export default function Payments({ user }) {
   const [payments, setPayments] = useState([]);
@@ -38,10 +40,22 @@ export default function Payments({ user }) {
         <h1 className="text-2xl font-bold">Payments</h1>
 
         <button
-          className="bg-[#03023B] font-verdana text-white px-4 h-10 flex items-center justify-center rounded mt-5 gap-2 relative group hover:text-black hover:bg-[#FFDE59]"
+          className="bg-blue-500 text-white px-4 py-2 rounded"
           onClick={() => setShowForm(true)}
         >
           Add Payment
+          <span className="w-5 h-5 relative inline-block">
+            <img
+                src={white_circle}
+                alt="white circle"
+                className="absolute top-0 left-0 w-5 h-5 opacity-100 group-hover:opacity-0"
+            />
+            <img
+              src={black_circle}
+              alt="black circle"
+              className="absolute top-0 left-0 w-5 h-5 opacity-0 group-hover:opacity-100"
+            />
+            </span>
           <span className="w-5 h-5 relative inline-block">
             <img
               src={white_circle}

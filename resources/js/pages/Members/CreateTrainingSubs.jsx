@@ -55,7 +55,7 @@ export default function CreateTrainingSubs({ onClose }) {
         return;
       }
 
-      setMessage('Training subscription added successfully ✅');
+      setMessage('Training subscription added successfully');
 
       setTimeout(() => onClose(), 1500);
     } catch (err) {
@@ -99,11 +99,21 @@ export default function CreateTrainingSubs({ onClose }) {
             required
           >
             <option value="">Select Plan</option>
-            {plans.map(plan => (
-              <option key={plan.id} value={plan.id}>
-                {plan.name} - ₱{plan.price}
-              </option>
-            ))}
+            {plans.map(plan => {
+              const isFull = plan.is_promo && 
+                            plan.max_slots !== null && 
+                            plan.training_subscriptions_count >= plan.max_slots;
+
+              const slotsDisplay = plan.is_promo && plan.max_slots !== null
+                ? ` (${plan.max_slots - (plan.training_subscriptions_count || 0)} slots left)`
+                : '';
+
+              return (
+                <option key={plan.id} value={plan.id} disabled={isFull}>
+                  {plan.name} - ₱{plan.price}{isFull ? ' (Full)' : slotsDisplay}
+                </option>
+              );
+            })}
           </select>
 
           <input
@@ -122,7 +132,11 @@ export default function CreateTrainingSubs({ onClose }) {
           </button>
         </form>
 
-        {message && <p className="mt-3 text-center text-green-600">{message}</p>}
+        {message && (
+          <p className={`mt-3 text-center ${message.includes('successfully') ? 'text-green-600' : 'text-red-500'}`}>
+            {message}
+          </p>
+        )}
       </div>
     </div>
   );

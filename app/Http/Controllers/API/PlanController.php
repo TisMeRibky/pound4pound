@@ -12,15 +12,17 @@ class PlanController extends Controller
      * Display a listing of plans
      */
     public function index()
-    {
-        try {
-            $plans = Plan::with('program')->get();
-            return response()->json(['data' => $plans]);
-        } catch (\Exception $e) {
-            \Log::error('PlanController@index error: '.$e->getMessage());
-            return response()->json(['message' => 'Server error'], 500);
+        {
+            try {
+                $plans = Plan::with('program')
+                    ->withCount('trainingSubscriptions')  // adds training_subscriptions_count
+                    ->get();
+                return response()->json(['data' => $plans]);
+            } catch (\Exception $e) {
+                \Log::error('PlanController@index error: '.$e->getMessage());
+                return response()->json(['message' => 'Server error'], 500);
+            }
         }
-    }
 
     /**
      * Store a newly created plan
@@ -107,5 +109,27 @@ class PlanController extends Controller
         return response()->json([
             'message' => 'Plan deleted successfully.'
         ]);
+    }
+
+    /**
+     * Get subscriptions for a specific plan
+     */
+    public function subscriptions($id)
+    {
+        $plan = Plan::with(['trainingSubscriptions.member'])->findOrFail($id);
+
+        $subscribers = $plan->trainingSubscriptions->map(function ($sub) {
+            return [
+                'id' => $sub->id,
+                'member_name' => $sub->member
+                    ? $sub->member->first_name . ' ' . $sub->member->last_name
+                    : 'Deleted Member',
+                'start_date' => $sub->start_date?->format('Y-m-d'),
+                'end_date' => $sub->end_date?->format('Y-m-d'),
+                'status' => $sub->status,
+            ];
+        });
+
+        return response()->json(['data' => $subscribers]);
     }
 }
