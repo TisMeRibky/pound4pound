@@ -73,7 +73,7 @@ class PlanController extends Controller
         $plan = Plan::findOrFail($id);
 
         $validated = $request->validate([
-            'program_id' => 'required|exists:programs,program_id',
+            'program_id' => 'required|exists:programs,id',
             'name' => 'required|string|max:255',
             'duration_days' => 'required|integer|min:1',
             'price' => 'required|numeric|min:0',
