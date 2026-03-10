@@ -7,6 +7,7 @@ use App\Http\Controllers\API\MembershipController;
 use App\Http\Controllers\API\ProgramController;
 use App\Http\Controllers\API\PlanController;
 use App\Http\Controllers\API\TrainingSubscriptionController;
+use App\Http\Controllers\API\DashboardController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -51,4 +52,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/payments/{payment}', [PaymentController::class, 'show']); 
     Route::get('/training-subscriptions', [TrainingSubscriptionController::class, 'index']);
     Route::post('/training-subscriptions', [TrainingSubscriptionController::class, 'store']);
+});
+
+
+// Dashboard
+Route::middleware('auth:sanctum')->group(function () {
+Route::get('/dashboard', [DashboardController::class, 'index']);
 });

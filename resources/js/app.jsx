@@ -93,6 +93,7 @@ function App() {
         </PrivateRoute>
       }
     >
+      {/* Dashboard */}
       <Route path="/dashboard" element={<Dashboard user={user} />} />
 
       {/* Programs */}
@@ -114,7 +115,7 @@ function App() {
   );
 }
 
-document.body.style.overflow = 'hidden';
+
 
 createRoot(document.getElementById('app')).render(
   <BrowserRouter basename="/">
