@@ -79,7 +79,7 @@ export default function PlanProfile({ plan, token, onSuccess, onClose }) {
         is_promo: !!formData.is_promo,
       };
 
-      const res = await fetch(`/api/plans/${plan.plan_id}`, {
+      const res = await fetch(`/api/plans/${plan.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -107,7 +107,7 @@ export default function PlanProfile({ plan, token, onSuccess, onClose }) {
     if (!window.confirm("Are you sure you want to delete this plan?")) return;
 
     try {
-      const res = await fetch(`/api/plans/${plan.plan_id}`, {
+      const res = await fetch(`/api/plans/${plan.id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -161,7 +161,7 @@ export default function PlanProfile({ plan, token, onSuccess, onClose }) {
             >
               <option value="">Select Program</option>
               {programs.map((p) => (
-                <option key={p.program_id} value={p.program_id}>
+                <option key={p.id} value={p.id}>
                   {p.name}
                 </option>
               ))}
