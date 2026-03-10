@@ -104,14 +104,7 @@ export default function CreateMembership({ onClose }) {
           ))}
         </select>
 
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          className="px-3 py-2 border rounded"
-        >
-          <option value="annual">Annual</option>
-          <option value="walk-in">Walk-in</option>
-        </select>
+
 
         <input
           type="date"
