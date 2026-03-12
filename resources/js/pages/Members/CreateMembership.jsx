@@ -104,8 +104,6 @@ export default function CreateMembership({ onClose }) {
           ))}
         </select>
 
-
-
         <input
           type="date"
           value={startDate}
@@ -113,15 +111,6 @@ export default function CreateMembership({ onClose }) {
           className="px-3 py-2 border rounded"
           required
         />
-
-        {type === 'annual' && startDate && (
-          <input
-            type="date"
-            value={endDate}
-            readOnly
-            className="px-3 py-2 border rounded bg-gray-100"
-          />
-        )}
 
         <button
           type="submit"
