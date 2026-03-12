@@ -55,6 +55,6 @@ class MembershipController extends Controller
             'proof'          => null,
         ]);
 
-        return response()->json(['message' => 'Membership created']);
+        return response()->json(['message' => 'Membership created successfully!']);
     }
 }
