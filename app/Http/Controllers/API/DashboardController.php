@@ -9,6 +9,9 @@ use App\Models\Payment;
 use App\Models\Plan;
 use App\Models\TrainingSubscription;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\GymReportExport;
+
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -117,5 +120,56 @@ class DashboardController extends Controller
                 'promo_plans'              => $promoPlans,
             ]
         ]);
+    }
+
+    private function getDashboardData()
+    {
+        $now = Carbon::now();
+        $startOfMonth = $now->copy()->startOfMonth();
+        $endOfMonth   = $now->copy()->endOfMonth();
+        $startOfYear  = $now->copy()->startOfYear();
+
+        $totalActive = Member::where('status', 'Active')->count();
+
+        $annualMembers = Membership::where('type', 'annual')
+            ->whereHas('member', fn($q) => $q->where('status', 'Active'))
+            ->count();
+
+        $walkInMembers = Membership::where('type', 'walk-in')
+            ->whereHas('member', fn($q) => $q->where('status', 'Active'))
+            ->count();
+
+        $newMembersThisMonth = Member::whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->count();
+
+        $monthlyRevenue = Payment::whereBetween('payment_date', [$startOfMonth, $endOfMonth])
+            ->sum('amount');
+
+        $annualRevenue = Payment::whereBetween('payment_date', [$startOfYear, $now])
+            ->sum('amount');
+
+        return [
+            'members' => [
+                'total_active' => $totalActive,
+                'annual' => $annualMembers,
+                'walk_in' => $walkInMembers,
+                'new_this_month' => $newMembersThisMonth,
+            ],
+            'revenue' => [
+                'monthly_total' => (float) $monthlyRevenue,
+                'annual_total' => (float) $annualRevenue,
+            ]
+        ];
+    }
+
+    public function exportFullReport()
+    {
+        $dashboardStats = $this->getDashboardData();
+        $members = Member::all();
+
+        return Excel::download(
+            new GymReportExport($dashboardStats, $members),
+            'gym_report.xlsx'
+        );
     }
 }

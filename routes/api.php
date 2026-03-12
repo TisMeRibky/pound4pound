@@ -63,4 +63,6 @@ Route::middleware('auth:sanctum')->group(function () {
 // Dashboard
 Route::middleware('auth:sanctum')->group(function () {
 Route::get('/dashboard', [DashboardController::class, 'index']);
+Route::get('/dashboard/export', [DashboardController::class, 'exportFullReport']);
+Route::get('/members/export-report', [MemberController::class, 'exportReport']);
 });

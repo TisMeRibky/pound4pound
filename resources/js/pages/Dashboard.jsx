@@ -80,6 +80,25 @@ export default function Dashboard() {
 
   const currentMonthName = MONTHS[new Date().getMonth()];
 
+  const downloadReport = async () => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch("/api/reports/export", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const blob = await response.blob();
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = "gym_report.xlsx";
+    a.click();
+  };
+
   return (
     <div className="flex-1 p-8 bg-gray-50 overflow-auto min-h-screen">
 
@@ -234,6 +253,15 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Download Full Report Button */}
+      <div className="flex justify-end">
+        <button
+          onClick={downloadReport}
+          className="bg-[#03023B] text-white px-4 py-2 rounded hover:text-black hover:bg-[#FFDE59] transition"
+        >
+          Download Full Report
+        </button>
+      </div>
     </div>
   );
 }

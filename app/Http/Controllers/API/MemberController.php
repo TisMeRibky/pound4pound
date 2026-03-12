@@ -4,6 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Member;
+use App\Models\Payment;
+use App\Exports\GymReportExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
+
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
@@ -104,5 +109,40 @@ class MemberController extends Controller
         return response()->json([
             'data' => $members
         ]);
+    }
+
+
+    public function exportReport()
+    {
+        // MEMBER DATA
+        $members = Member::all();
+
+        // DASHBOARD DATA (simplified example)
+        $now = Carbon::now();
+
+        $monthlyRevenue = Payment::whereMonth('payment_date', $now->month)
+            ->whereYear('payment_date', $now->year)
+            ->sum('amount');
+
+        $annualRevenue = Payment::whereYear('payment_date', $now->year)
+            ->sum('amount');
+
+        $dashboardStats = [
+            'members' => [
+                'total_active' => Member::where('status', 'active')->count(),
+                'annual' => Member::where('type', 'annual')->count(),
+                'walk_in' => Member::where('type', 'walk-in')->count(),
+                'new_this_month' => Member::whereMonth('created_at', $now->month)->count(),
+            ],
+            'revenue' => [
+                'monthly_total' => $monthlyRevenue,
+                'annual_total' => $annualRevenue,
+            ]
+        ];
+
+        return Excel::download(
+            new GymReportExport($dashboardStats, $members),
+            'gym_report.xlsx'
+        );
     }
 }
