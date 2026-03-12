@@ -81,6 +81,16 @@ export default function SidebarMenu({ onLogout }) {
             >
               Membership
             </li>
+             <li
+              className={`${subItem} ${
+                isActive('/walkins')
+                  ? 'text-black bg-[#FFDE59]'
+                  : 'text-white hover:text-black hover:bg-[#FFDE59]'
+              }`}
+              onClick={() => navigate('/walkins')}
+            >
+              Walk-Ins
+            </li>
             <li
               className={`${subItem} ${
                 isActive('/trainingsubs')

@@ -21,7 +21,6 @@ class DashboardController extends Controller
         $expiryWindow = $now->copy()->addDays(10);
         $startOfYear  = $now->copy()->startOfYear();
 
-        // ── 1. Member counts ────────────────────────────────────────────────
         $totalActive = Member::where('status', 'Active')->count();
 
         $annualMembers = Membership::where('type', 'annual')
@@ -32,18 +31,15 @@ class DashboardController extends Controller
             ->whereHas('member', fn($q) => $q->where('status', 'Active'))
             ->count();
 
-        // ── 2. New members this month ───────────────────────────────────────
         $newMembersThisMonth = Member::whereBetween('created_at', [$startOfMonth, $endOfMonth])
             ->count();
 
-        // ── 3. Revenue ──────────────────────────────────────────────────────
         $monthlyRevenue = Payment::whereBetween('payment_date', [$startOfMonth, $endOfMonth])
             ->sum('amount');
 
         $annualRevenue = Payment::whereBetween('payment_date', [$startOfYear, $now])
             ->sum('amount');
 
-        // Revenue by month for current year (Jan–Dec)
         $revenueByMonth = Payment::selectRaw('MONTH(payment_date) as month, SUM(amount) as total')
             ->whereYear('payment_date', $now->year)
             ->groupBy('month')
@@ -57,7 +53,6 @@ class DashboardController extends Controller
             'value' => isset($revenueByMonth[$m]) ? (float) $revenueByMonth[$m]->total : 0,
         ])->values();
 
-        // ── 4. Expiring memberships (within 10 days, not already expired) ──
         $expiringMemberships = Membership::with('member')
             ->whereNotNull('end_date')
             ->whereBetween('end_date', [$now->toDateString(), $expiryWindow->toDateString()])
@@ -69,7 +64,6 @@ class DashboardController extends Controller
                 'days_left'   => $now->diffInDays($m->end_date, false),
             ]);
 
-        // ── 5. Expiring training subscriptions (within 10 days) ─────────────
         $expiringSubscriptions = TrainingSubscription::with(['member', 'plan'])
             ->where('status', 'active')
             ->whereBetween('end_date', [$now->toDateString(), $expiryWindow->toDateString()])
@@ -81,7 +75,6 @@ class DashboardController extends Controller
                 'days_left'   => $now->diffInDays($s->end_date, false),
             ]);
 
-        // ── 6. Recent payments (last 5) ─────────────────────────────────────
         $recentPayments = Payment::with('member')
             ->orderBy('payment_date', 'desc')
             ->limit(5)
@@ -93,7 +86,6 @@ class DashboardController extends Controller
                 'payment_method' => $p->payment_method,
             ]);
 
-        // ── 7. Promo plan slots ──────────────────────────────────────────────
         $promoPlans = Plan::with('trainingSubscriptions')
             ->where('is_promo', true)
             ->where('is_active', true)

@@ -9,23 +9,25 @@ use Illuminate\Http\Request;
 class PaymentController extends Controller
 {
     public function index()
-    {
-        $payments = Payment::with('member')
-        ->get()
-        ->map(function ($payment) {
-            return [
-                'id' => $payment->id,
-                'member_id' => $payment->member?->id,
-                'member_name' => $payment->member->first_name . ' ' . $payment->member->last_name,
-                'amount' => $payment->amount,
-                'payment_date' => $payment->payment_date ? $payment->payment_date->format('Y-m-d') : null,
-                'payment_method' => $payment->payment_method,
-                'proof' => $payment->proof,
-                'created_at' => $payment->created_at ? $payment->created_at->format('Y-m-d') : null,
-            ];
-        });
+{
+    $payments = Payment::with('member')
+    ->get()
+    ->map(function ($payment) {
+        return [
+            'id' => $payment->id,
+            'member_id' => $payment->member?->id,
+            'member_name' => $payment->member 
+                ? $payment->member->first_name . ' ' . $payment->member->last_name 
+                : 'Guest',
+            'amount' => $payment->amount,
+            'payment_date' => $payment->payment_date ? $payment->payment_date->format('Y-m-d') : null,
+            'payment_method' => $payment->payment_method,
+            'proof' => $payment->proof,
+            'created_at' => $payment->created_at ? $payment->created_at->format('Y-m-d') : null,
+        ];
+    });
 
-        return response()->json(['data' => $payments]);
+    return response()->json(['data' => $payments]);
     }
 
     public function store(Request $request)

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-USE App\Models\TrainingSubscription;
+use App\Models\TrainingSubscription;
 use App\Models\Member;
 use App\Models\Plan;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 
 class TrainingSubscriptionController extends Controller
@@ -47,14 +48,19 @@ class TrainingSubscriptionController extends Controller
         $member = Member::findOrFail($validated['member_id']);
         $plan = Plan::findOrFail($validated['plan_id']);
 
-        $activeMembership = $member->membership()
-            ->whereDate('start_date', '<=', now())
-            ->whereDate('end_date', '>=', now())
-            ->first();
+        // Fixed membership check — same pattern as WalkInController
+        $membership = $member->membership()->first();
 
-        if (!$activeMembership) {
+        if (!$membership) {
             return response()->json([
                 'message' => 'Member does not have an active membership.'
+            ], 400);
+        }
+
+        // Only check expiry for annual memberships
+        if ($membership->type === 'annual' && $membership->end_date && $membership->end_date->lt(now())) {
+            return response()->json([
+                'message' => 'Member\'s annual membership has expired.'
             ], 400);
         }
 
@@ -64,7 +70,6 @@ class TrainingSubscriptionController extends Controller
             ], 400);
         }
 
-        
         if ($plan->is_promo && $plan->max_slots !== null) {
             $currentCount = TrainingSubscription::where('plan_id', $plan->id)->count();
 
@@ -75,7 +80,7 @@ class TrainingSubscriptionController extends Controller
             }
         }
 
-        $existingSubscription = \App\Models\TrainingSubscription::where('member_id', $member->id)
+        $existingSubscription = TrainingSubscription::where('member_id', $member->id)
             ->where('plan_id', $plan->id)
             ->first();
 
@@ -88,12 +93,21 @@ class TrainingSubscriptionController extends Controller
         $startDate = now();
         $endDate = now()->addDays($plan->duration_days);
 
-        $subscription = \App\Models\TrainingSubscription::create([
-            'member_id' => $member->id,
-            'plan_id'   => $plan->id,
-            'start_date'=> $startDate,
-            'end_date'  => $endDate,
-            'status'    => 'active',
+        $subscription = TrainingSubscription::create([
+            'member_id'  => $member->id,
+            'plan_id'    => $plan->id,
+            'start_date' => $startDate,
+            'end_date'   => $endDate,
+            'status'     => 'active',
+        ]);
+
+        // Auto-create payment record for the training subscription fee
+        Payment::create([
+            'member_id'      => $member->id,
+            'amount'         => $plan->price,
+            'payment_date'   => $startDate->format('Y-m-d'),
+            'payment_method' => 'training-subscription',
+            'proof'          => null,
         ]);
 
         return response()->json([

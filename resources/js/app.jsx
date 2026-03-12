@@ -10,6 +10,7 @@ import Plans from './pages/Plans/Plans';
 import MemberProfiles from './pages/Members/MemberProfiles';
 import MemberProfile from './pages/Members/MemberProfile';
 import Memberships from './pages/Members/Memberships';
+import WalkIns from './pages/Members/WalkIns';
 import TrainingSubs from './pages/Members/TrainingSubs';
 import Payments from './pages/Members/Payments';
 import PaymentDetails from './pages/Members/PaymentDetails';
@@ -105,6 +106,7 @@ function App() {
       {/* Members */}
       <Route path="/memberprofiles" element={<MemberProfiles user={user} />} />
       <Route path="/memberships" element={<Memberships user={user} />} />
+      <Route path="/walkins" element={<WalkIns user={user} />} />
       <Route path="/trainingsubs" element={<TrainingSubs user={user} />} />
       <Route path="/payments" element={<Payments user={user} />} />
       <Route path="/payments/:id" element={<PaymentDetails />} />
@@ -114,8 +116,6 @@ function App() {
   </Routes>
   );
 }
-
-
 
 createRoot(document.getElementById('app')).render(
   <BrowserRouter basename="/">
