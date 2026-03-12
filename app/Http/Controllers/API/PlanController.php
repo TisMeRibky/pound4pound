@@ -123,7 +123,7 @@ class PlanController extends Controller
                 'id' => $sub->id,
                 'member_name' => $sub->member
                     ? $sub->member->first_name . ' ' . $sub->member->last_name
-                    : 'Deleted Member',
+                    : 'Guest',
                 'start_date' => $sub->start_date?->format('Y-m-d'),
                 'end_date' => $sub->end_date?->format('Y-m-d'),
                 'status' => $sub->status,

@@ -80,7 +80,7 @@ class DashboardController extends Controller
             ->limit(5)
             ->get()
             ->map(fn($p) => [
-                'member_name'    => $p->member ? $p->member->first_name . ' ' . $p->member->last_name : 'Deleted Member',
+                'member_name'    => $p->member ? $p->member->first_name . ' ' . $p->member->last_name : 'Guest',
                 'amount'         => (float) $p->amount,
                 'payment_date'   => $p->payment_date?->format('Y-m-d'),
                 'payment_method' => $p->payment_method,

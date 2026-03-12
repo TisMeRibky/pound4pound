@@ -70,7 +70,7 @@ class PaymentController extends Controller
         return response()->json([
             'id' => $payment->id,
             'member_id' => $payment->member?->id,
-            'member_name' => $payment->member ? ($payment->member->first_name . ' ' . $payment->member->last_name) : 'Deleted Member',
+            'member_name' => $payment->member ? ($payment->member->first_name . ' ' . $payment->member->last_name) : 'Guest',
             'amount' => $payment->amount,
             'payment_date' => $payment->payment_date ? $payment->payment_date->format('Y-m-d') : null,
             'payment_method' => $payment->payment_method,
