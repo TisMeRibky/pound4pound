@@ -7,6 +7,8 @@ use App\Http\Controllers\API\MembershipController;
 use App\Http\Controllers\API\ProgramController;
 use App\Http\Controllers\API\PlanController;
 use App\Http\Controllers\API\TrainingSubscriptionController;
+use App\Http\Controllers\API\DashboardController;
+use App\Http\Controllers\API\WalkInController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -46,9 +48,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/members', MemberController::class);
     Route::get('/memberships', [MembershipController::class, 'index']);
     Route::post('/memberships', [MembershipController::class, 'store']);
+    Route::get('/walk-ins', [WalkInController::class, 'index']);
+    Route::post('/walk-ins', [WalkInController::class, 'store']);
+    Route::get('/walk-ins/{walkIn}', [WalkInController::class, 'show']);
+    Route::delete('/walk-ins/{walkIn}', [WalkInController::class, 'destroy']);
     Route::get('/payments', [PaymentController::class, 'index']);
     Route::post('/payments', [PaymentController::class, 'store']);
     Route::get('/payments/{payment}', [PaymentController::class, 'show']); 
     Route::get('/training-subscriptions', [TrainingSubscriptionController::class, 'index']);
     Route::post('/training-subscriptions', [TrainingSubscriptionController::class, 'store']);
+});
+
+
+// Dashboard
+Route::middleware('auth:sanctum')->group(function () {
+Route::get('/dashboard', [DashboardController::class, 'index']);
 });
