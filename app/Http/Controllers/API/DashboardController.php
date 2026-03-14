@@ -135,9 +135,7 @@ class DashboardController extends Controller
             ->whereHas('member', fn($q) => $q->where('status', 'Active'))
             ->count();
 
-        $walkInMembers = Membership::where('type', 'walk-in')
-            ->whereHas('member', fn($q) => $q->where('status', 'Active'))
-            ->count();
+        $walkInMembers = WalkIn::where('has_membership', '0')->count();
 
         $newMembersThisMonth = Member::whereBetween('created_at', [$startOfMonth, $endOfMonth])
             ->count();

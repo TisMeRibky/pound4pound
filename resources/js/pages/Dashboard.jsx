@@ -71,6 +71,7 @@ export default function Dashboard() {
   );
 
   const m = stats?.members ?? {};
+  const w = stats?.walkInmembers ?? {};
   const rev = stats?.revenue ?? {};
   const chartData = rev.chart ?? [];
   const expiringMemberships = stats?.expiring_memberships ?? [];
@@ -83,17 +84,23 @@ export default function Dashboard() {
   const downloadReport = async () => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch("/api/reports/export", {
+    const response = await fetch("/api/dashboard/export", {
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json"
       }
     });
 
+    if (!response.ok) {
+      const text = await response.text();
+      console.error("Export failed:", text);
+      return;
+    }
+
     const blob = await response.blob();
-
     const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
 
+    const a = document.createElement("a");
     a.href = url;
     a.download = "gym_report.xlsx";
     a.click();
