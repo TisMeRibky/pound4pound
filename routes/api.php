@@ -53,8 +53,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/walk-ins/{walkIn}', [WalkInController::class, 'show']);
     Route::delete('/walk-ins/{walkIn}', [WalkInController::class, 'destroy']);
     Route::get('/payments', [PaymentController::class, 'index']);
+    Route::get('/payments', [PaymentController::class, 'index']);
     Route::post('/payments', [PaymentController::class, 'store']);
-    Route::get('/payments/{payment}', [PaymentController::class, 'show']); 
+    Route::get('/payments/{payment}', [PaymentController::class, 'show']);
+    Route::post('/payments/{payment}/update', [PaymentController::class, 'update']);
+    Route::delete('/payments/{payment}', [PaymentController::class, 'destroy']);
     Route::get('/training-subscriptions', [TrainingSubscriptionController::class, 'index']);
     Route::post('/training-subscriptions', [TrainingSubscriptionController::class, 'store']);
 });

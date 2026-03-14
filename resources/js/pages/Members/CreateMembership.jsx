@@ -130,7 +130,7 @@ export default function CreateMembership({ onClose }) {
         </form>
 
         {message && (
-          <p className={`mt-3 text-center font-medium ${message.includes('successfully') ? 'text-green-600' : 'text-red-500'}`}>
+          <p className={`mt-3 text-center font-medium ${message.toLowerCase().includes('successfully') ? 'text-green-600' : 'text-red-500'}`}>
             {message}
           </p>
         )}

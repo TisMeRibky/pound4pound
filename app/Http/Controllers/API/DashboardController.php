@@ -8,6 +8,7 @@ use App\Models\Membership;
 use App\Models\Payment;
 use App\Models\Plan;
 use App\Models\TrainingSubscription;
+use App\Models\WalkIn;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\GymReportExport;
@@ -30,8 +31,7 @@ class DashboardController extends Controller
             ->whereHas('member', fn($q) => $q->where('status', 'Active'))
             ->count();
 
-        $walkInMembers = Membership::where('type', 'walk-in')
-            ->whereHas('member', fn($q) => $q->where('status', 'Active'))
+        $walkInMembers = WalkIn::whereBetween('date', [$startOfMonth, $endOfMonth])
             ->count();
 
         $newMembersThisMonth = Member::whereBetween('created_at', [$startOfMonth, $endOfMonth])
@@ -40,7 +40,7 @@ class DashboardController extends Controller
         $monthlyRevenue = Payment::whereBetween('payment_date', [$startOfMonth, $endOfMonth])
             ->sum('amount');
 
-        $annualRevenue = Payment::whereBetween('payment_date', [$startOfYear, $now])
+        $annualRevenue = Payment::whereYear('payment_date', $now->year)
             ->sum('amount');
 
         $revenueByMonth = Payment::selectRaw('MONTH(payment_date) as month, SUM(amount) as total')

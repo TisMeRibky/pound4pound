@@ -18,24 +18,22 @@ class TrainingSubscriptionController extends Controller
             ->get()
             ->map(function ($sub) {
                 return [
-                    'id' => $sub->id,
-                    'member' => $sub->member ? [
+                    'id'         => $sub->id,
+                    'member'     => $sub->member ? [
                         'first_name' => $sub->member->first_name,
-                        'last_name' => $sub->member->last_name,
+                        'last_name'  => $sub->member->last_name,
                     ] : null,
-                    'plan' => $sub->plan ? [
-                        'name' => $sub->plan->name,
+                    'plan'       => $sub->plan ? [
+                        'name'  => $sub->plan->name,
                         'price' => $sub->plan->price,
                     ] : null,
                     'start_date' => $sub->start_date?->format('Y-m-d') ?? null,
-                    'end_date' => $sub->end_date?->format('Y-m-d') ?? null,
-                    'status' => $sub->status ?? 'active',
+                    'end_date'   => $sub->end_date?->format('Y-m-d') ?? null,
+                    'status'     => $sub->status ?? 'active',
                 ];
             });
 
-        return response()->json([
-            'data' => $subscriptions
-        ]);
+        return response()->json(['data' => $subscriptions]);
     }
 
     public function store(Request $request)
@@ -46,9 +44,8 @@ class TrainingSubscriptionController extends Controller
         ]);
 
         $member = Member::findOrFail($validated['member_id']);
-        $plan = Plan::findOrFail($validated['plan_id']);
+        $plan   = Plan::findOrFail($validated['plan_id']);
 
-        // Fixed membership check — same pattern as WalkInController
         $membership = $member->membership()->first();
 
         if (!$membership) {
@@ -57,7 +54,6 @@ class TrainingSubscriptionController extends Controller
             ], 400);
         }
 
-        // Only check expiry for annual memberships
         if ($membership->type === 'annual' && $membership->end_date && $membership->end_date->lt(now())) {
             return response()->json([
                 'message' => 'Member\'s annual membership has expired.'
@@ -72,7 +68,6 @@ class TrainingSubscriptionController extends Controller
 
         if ($plan->is_promo && $plan->max_slots !== null) {
             $currentCount = TrainingSubscription::where('plan_id', $plan->id)->count();
-
             if ($currentCount >= $plan->max_slots) {
                 return response()->json([
                     'message' => 'This plan has reached its maximum number of slots.'
@@ -91,7 +86,7 @@ class TrainingSubscriptionController extends Controller
         }
 
         $startDate = now();
-        $endDate = now()->addDays($plan->duration_days);
+        $endDate   = now()->addDays($plan->duration_days);
 
         $subscription = TrainingSubscription::create([
             'member_id'  => $member->id,
@@ -101,18 +96,20 @@ class TrainingSubscriptionController extends Controller
             'status'     => 'active',
         ]);
 
-        // Auto-create payment record for the training subscription fee
+        // Auto-create payment with plan name stored in notes
         Payment::create([
             'member_id'      => $member->id,
             'amount'         => $plan->price,
             'payment_date'   => $startDate->format('Y-m-d'),
-            'payment_method' => 'training-subscription',
+            'payment_type'   => 'training_subscription',
+            'payment_method' => null,
+            'notes'          => $plan->name,
             'proof'          => null,
         ]);
 
         return response()->json([
             'message' => 'Training subscription created successfully.',
-            'data' => $subscription->load('member', 'plan')
+            'data'    => $subscription->load('member', 'plan'),
         ], 201);
     }
 }
