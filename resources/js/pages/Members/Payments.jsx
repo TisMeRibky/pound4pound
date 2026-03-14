@@ -5,31 +5,52 @@ import CreatePayment from './CreatePayment';
 import white_circle from '@/assets/plus-circle-white.svg';
 import black_circle from '@/assets/plus-circle-black.svg';
 
-export default function Payments({ user }) {
-  const [payments, setPayments] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const navigate = useNavigate();
-  const token = localStorage.getItem('token');
+const TYPE_LABELS = {
+  annual_membership:     'Annual Membership',
+  walk_in:               'Walk-in',
+  training_subscription: 'Training Subscription',
+};
 
-  // Fetch payments safely
+export default function Payments() {
+  const [payments,  setPayments]  = useState([]);
+  const [showForm,  setShowForm]  = useState(false);
+  const navigate = useNavigate();
+
   const fetchPayments = () => {
     fetch('/api/payments', {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     })
-      .then(res => res.json())
-      .then(data => setPayments(data.data || []))
-      .catch(err => console.error(err));
+      .then(r => r.json())
+      .then(d => setPayments(d.data || []))
+      .catch(console.error);
   };
 
-  useEffect(() => {
-    fetchPayments();
-  }, []);
+  useEffect(() => { fetchPayments(); }, []);
 
   const columns = [
-    { key: 'member_name', label: 'Member Name' },
-    { key: 'amount', label: 'Amount' },
-    { key: 'payment_date', label: 'Date' },
-    { key: 'proof', label: 'Proof' },
+    { key: 'member_name',    label: 'Member' },
+    { key: 'payment_type', label: 'Type', searchable: false },
+    {
+      key: 'notes',
+      label: 'Notes',
+      searchable: false,
+      render: row => row.notes && row.notes !== '—'
+        ? <span title={row.notes} className="block max-w-[140px] truncate text-gray-500 text-sm">{row.notes}</span>
+        : <span className="text-gray-300">—</span>,
+    },
+    {
+      key: 'payment_method',
+      label: 'Method',
+      searchable: false,
+      type: 'badge',
+      badgeColors: {
+        'gcash':         'bg-sky-100 text-sky-700',
+        'bank transfer': 'bg-emerald-100 text-emerald-700',
+        'cash':          'bg-yellow-100 text-yellow-700',
+      },
+    },
+    { key: 'amount',       label: 'Amount', searchable: false },
+    { key: 'payment_date', label: 'Date',   searchable: false },
   ];
 
   return (
@@ -43,38 +64,28 @@ export default function Payments({ user }) {
         >
           Add Payment
           <span className="w-5 h-5 relative inline-block">
-            <img
-              src={white_circle}
-              alt="white circle"
-              className="absolute top-0 left-0 w-5 h-5 opacity-100 group-hover:opacity-0"
-            />
-            <img
-              src={black_circle}
-              alt="black circle"
-              className="absolute top-0 left-0 w-5 h-5 opacity-0 group-hover:opacity-100"
-            />
+            <img src={white_circle} alt="" className="absolute top-0 left-0 w-5 h-5 opacity-100 group-hover:opacity-0" />
+            <img src={black_circle} alt="" className="absolute top-0 left-0 w-5 h-5 opacity-0 group-hover:opacity-100" />
           </span>
         </button>
       </div>
 
       {showForm && (
-        <CreatePayment
-          onClose={() => {
-            setShowForm(false);
-            fetchPayments(); // refresh after adding
-          }}
-        />
+        <CreatePayment onClose={() => { setShowForm(false); fetchPayments(); }} />
       )}
 
       <DataTable
         data={payments.map(p => ({
           ...p,
-          member_name: p.member_name,
-          payment_date: new Date(p.payment_date).toLocaleDateString(),
+          payment_type:   TYPE_LABELS[p.payment_type] || p.payment_type || '—',
+          payment_method: p.payment_method || '—',
+          notes:          p.notes || '—',
+          amount:         `₱${Number(p.amount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}`,
+          payment_date:   p.payment_date ? new Date(p.payment_date).toLocaleDateString() : '—',
         }))}
         columns={columns}
         itemsPerPage={10}
-        onRowClick={(row) => navigate(`/payments/${row.id}`)}
+        onRowClick={row => navigate(`/payments/${row.id}`)}
       />
     </div>
   );

@@ -12,17 +12,17 @@ class MembershipController extends Controller
 {
     public function index()
     {
-        $memberships = Membership::with('member') 
+        $memberships = Membership::with('member')
             ->get()
             ->map(function ($membership) {
                 return [
-                    'id' => $membership->id,
-                    'member_id' => $membership->member->id,
-                    'member_name' => $membership->member->first_name . ' ' . $membership->member->last_name,
-                    'type' => $membership->type,
-                    'status' => $membership->member->status,
+                    'id'         => $membership->id,
+                    'member_id'  => $membership->member->id,
+                    'member_name'=> $membership->member->first_name . ' ' . $membership->member->last_name,
+                    'type'       => $membership->type,
+                    'status'     => $membership->member->status,
                     'start_date' => $membership->start_date?->format('Y-m-d'),
-                    'end_date' => $membership->end_date?->format('Y-m-d'),
+                    'end_date'   => $membership->end_date?->format('Y-m-d'),
                     'created_at' => $membership->created_at->format('Y-m-d'),
                 ];
             });
@@ -46,12 +46,13 @@ class MembershipController extends Controller
             'end_date'   => $endDate,
         ]);
 
-        // Auto-create payment record for the annual membership fee
+        // Auto-create payment record — correct columns
         Payment::create([
             'member_id'      => $validated['member_id'],
             'amount'         => 1000,
             'payment_date'   => $validated['start_date'],
-            'payment_method' => 'annual-membership',
+            'payment_type'   => 'annual_membership',
+            'payment_method' => null,
             'proof'          => null,
         ]);
 

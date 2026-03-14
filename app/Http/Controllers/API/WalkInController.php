@@ -10,12 +10,9 @@ use Illuminate\Http\Request;
 
 class WalkInController extends Controller
 {
-    const RATE_NO_MEMBERSHIP  = 200;
+    const RATE_NO_MEMBERSHIP   = 200;
     const RATE_WITH_MEMBERSHIP = 150;
 
-    /**
-     * List all walk-ins, newest first.
-     */
     public function index()
     {
         $walkIns = WalkIn::with('member')
@@ -27,9 +24,6 @@ class WalkInController extends Controller
         return response()->json(['data' => $walkIns]);
     }
 
-    /**
-     * Log a new walk-in.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -42,23 +36,20 @@ class WalkInController extends Controller
 
         $hasMembership = (bool) $validated['has_membership'];
 
-        // If claiming membership, a member_id must be provided
         if ($hasMembership && empty($validated['member_id'])) {
             return response()->json([
                 'message' => 'A member must be selected when has_membership is true.'
             ], 422);
         }
 
-        // If non-member, a guest name must be provided
         if (!$hasMembership && empty($validated['guest_name'])) {
             return response()->json([
                 'message' => 'A guest name is required for non-members.'
             ], 422);
         }
 
-        // If member, verify they actually have a membership and it isn't expired
         if ($hasMembership) {
-            $member = Member::findOrFail($validated['member_id']);
+            $member     = Member::findOrFail($validated['member_id']);
             $membership = $member->membership()->first();
 
             if (!$membership) {
@@ -67,7 +58,6 @@ class WalkInController extends Controller
                 ], 422);
             }
 
-            // Only check expiry for annual memberships (walk-in type has no end date)
             if ($membership->type === 'annual' && $membership->end_date && $membership->end_date->lt(now())) {
                 return response()->json([
                     'message' => 'This member\'s annual membership has expired. The non-member rate applies.'
@@ -86,12 +76,13 @@ class WalkInController extends Controller
             'notes'          => $validated['notes'] ?? null,
         ]);
 
-        // Auto-create payment record for the walk-in fee
+        // Auto-create payment record — correct columns this time
         Payment::create([
             'member_id'      => $hasMembership ? $validated['member_id'] : null,
             'amount'         => $amount,
             'payment_date'   => $validated['date'],
-            'payment_method' => 'walk-in',
+            'payment_type'   => 'walk_in',
+            'payment_method' => null,
             'proof'          => null,
         ]);
 
@@ -101,24 +92,16 @@ class WalkInController extends Controller
         ], 201);
     }
 
-    /**
-     * Show a single walk-in.
-     */
     public function show(WalkIn $walkIn)
     {
         return response()->json(['data' => $this->format($walkIn->load('member'))]);
     }
 
-    /**
-     * Delete a walk-in record.
-     */
     public function destroy(WalkIn $walkIn)
     {
         $walkIn->delete();
         return response()->json(null, 204);
     }
-
-    /* ── helpers ───────────────────────────────────────────── */
 
     private function format(WalkIn $w): array
     {
