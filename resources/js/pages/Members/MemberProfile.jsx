@@ -15,7 +15,7 @@ export default function MemberProfile({ onSuccess }) {
   const [isEditing, setIsEditing] = useState(false);
   const [message,   setMessage]   = useState('');
   const [formData,  setFormData]  = useState({
-    first_name: '', last_name: '', email: '', phone: '', status: '',
+    first_name: '', last_name: '', email: '', phone: '', facebook: '', status: '',
   });
 
   // Training sub edit state
@@ -41,6 +41,7 @@ export default function MemberProfile({ onSuccess }) {
         setFormData({
           first_name: data.first_name,
           last_name:  data.last_name,
+          facebook:   data.facebook || '',
           email:      data.email,
           phone:      data.phone || '',
           status:     data.status,
@@ -229,6 +230,12 @@ export default function MemberProfile({ onSuccess }) {
 
         {!isEditing && (
           <div className="grid grid-cols-2 gap-3">
+            <InfoRow label="Facebook" value={member.facebook
+              ? (() => {
+                  const url = member.facebook.startsWith('http') ? member.facebook : `https://${member.facebook}`;
+                  return <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline truncate" onClick={e => e.stopPropagation()}>{member.facebook}</a>;
+                })()
+              : '—'} />
             <InfoRow label="Email" value={member.email} />
             <InfoRow label="Phone" value={member.phone || '—'} />
           </div>
@@ -241,6 +248,8 @@ export default function MemberProfile({ onSuccess }) {
                 placeholder="First Name" className="border px-3 py-2 rounded w-full text-sm" required />
               <input name="last_name" value={formData.last_name} onChange={handleChange}
                 placeholder="Last Name" className="border px-3 py-2 rounded w-full text-sm" required />
+              <input name="facebook" value={formData.facebook} onChange={handleChange}
+                placeholder="Facebook Profile URL (optional)" className="border px-3 py-2 rounded w-full text-sm col-span-2" />
               <input name="email" value={formData.email} onChange={handleChange}
                 placeholder="Email" type="email" className="border px-3 py-2 rounded w-full text-sm" required />
               <input name="phone" value={formData.phone} onChange={handleChange}
