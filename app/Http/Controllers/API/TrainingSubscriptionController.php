@@ -111,7 +111,7 @@ class TrainingSubscriptionController extends Controller
 
     public function destroy(TrainingSubscription $trainingSubscription)
     {
-        // Keep the payment record — financial history stays intact
+
         $trainingSubscription->delete();
         return response()->json(null, 204);
     }

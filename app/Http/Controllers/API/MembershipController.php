@@ -46,7 +46,6 @@ class MembershipController extends Controller
             'end_date'   => $endDate,
         ]);
 
-        // Auto-create payment record — correct columns
         Payment::create([
             'member_id'      => $validated['member_id'],
             'amount'         => 500,
