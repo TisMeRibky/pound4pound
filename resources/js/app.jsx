@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import Expense from './pages/Expenses/Expenses';
 import Programs from './pages/Programs/Programs';
 import Plans from './pages/Plans/Plans';
 import MemberProfiles from './pages/Members/MemberProfiles';
@@ -99,6 +100,9 @@ function App() {
 
       {/* Programs */}
       <Route path="/programs" element={<Programs user={user} />} />
+
+      {/* Expenses */}
+      <Route path="/expenses" element={<Expense user={user} />} />
 
       {/* Plans */}
       <Route path="/plans" element={<Plans user={user} />} />

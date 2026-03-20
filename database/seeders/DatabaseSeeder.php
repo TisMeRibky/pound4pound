@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Member;
 use App\Models\Program;
 use App\Models\Plan;
+use App\Models\Expense;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -36,6 +37,9 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make($user['password']),
             ]);
         }
+
+        //Expenses
+        Expense::factory()->count(20)->create();
 
         // Members
         Member::factory()->count(10)->create();

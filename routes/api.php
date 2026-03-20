@@ -9,6 +9,7 @@ use App\Http\Controllers\API\PlanController;
 use App\Http\Controllers\API\TrainingSubscriptionController;
 use App\Http\Controllers\API\DashboardController;
 use App\Http\Controllers\API\WalkInController;
+use App\Http\Controllers\API\ExpenseController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,12 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::post('/logout', [AuthController::class, 'logout']);
+});
+
+// EXPENSES CRUD
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('expenses', [ExpenseController::class, 'index']);
+    Route::post('expenses', [ExpenseController::class, 'store']);
 });
 
 // PROGRAMS CRUD
