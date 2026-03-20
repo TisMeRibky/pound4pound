@@ -15,7 +15,7 @@ class MemberController extends Controller
 {
     public function index()
     {
-        return response()->json(['data' => Member::all()]);
+    return response()->json(['data' => Member::orderBy('created_at', 'desc')->get()]);
     }
 
     public function store(Request $request)
@@ -23,6 +23,7 @@ class MemberController extends Controller
         $validated = $request->validate([
             'first_name' => 'required|string',
             'last_name'  => 'required|string',
+            'facebook'   => 'nullable|string|max:255',
             'email'      => 'required|email|unique:members,email',
             'phone'      => 'nullable|string',
             'status'     => 'required|string',
@@ -56,6 +57,7 @@ class MemberController extends Controller
             'id'         => $member->id,
             'first_name' => $member->first_name,
             'last_name'  => $member->last_name,
+            'facebook'   => $member->facebook,
             'email'      => $member->email,
             'phone'      => $member->phone,
             'status'     => $member->status,
@@ -91,6 +93,7 @@ class MemberController extends Controller
         $validated = $request->validate([
             'first_name' => 'required|string',
             'last_name'  => 'required|string',
+            'facebook'   => 'nullable|string|max:255',
             'email'      => 'required|email|unique:members,email,' . $member->id,
             'phone'      => 'nullable|string',
             'status'     => 'required|string',

@@ -58,7 +58,7 @@ export default function Payments() {
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Payments</h1>
 
-        <button
+       {/* <button
           onClick={() => setShowForm(true)}
           className="bg-[#03023B] font-verdana text-white px-4 h-10 flex items-center justify-center rounded gap-2 relative group hover:text-black hover:bg-[#FFDE59]"
         >
@@ -67,7 +67,7 @@ export default function Payments() {
             <img src={white_circle} alt="" className="absolute top-0 left-0 w-5 h-5 opacity-100 group-hover:opacity-0" />
             <img src={black_circle} alt="" className="absolute top-0 left-0 w-5 h-5 opacity-0 group-hover:opacity-100" />
           </span>
-        </button>
+        </button> */}
       </div>
 
       {showForm && (

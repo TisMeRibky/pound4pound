@@ -64,7 +64,7 @@ class DashboardController extends Controller
                 'member_name' => $m->member ? $m->member->first_name . ' ' . $m->member->last_name : 'Unknown',
                 'type'        => $m->type,
                 'end_date'    => $m->end_date?->format('Y-m-d'),
-                'days_left'   => $now->diffInDays($m->end_date, false),
+                'days_left'   => (int) $now->diffInDays($m->end_date, false),
             ]);
 
         $expiringSubscriptions = TrainingSubscription::with(['member', 'plan'])
@@ -75,7 +75,7 @@ class DashboardController extends Controller
                 'member_name' => $s->member ? $s->member->first_name . ' ' . $s->member->last_name : 'Unknown',
                 'plan_name'   => $s->plan?->name ?? 'Unknown Plan',
                 'end_date'    => $s->end_date?->format('Y-m-d'),
-                'days_left'   => $now->diffInDays($s->end_date, false),
+                'days_left'   => (int) $now->diffInDays($s->end_date, false),
             ]);
 
         $recentPayments = Payment::with('member')

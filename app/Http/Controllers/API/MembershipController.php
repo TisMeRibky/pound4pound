@@ -13,6 +13,7 @@ class MembershipController extends Controller
     public function index()
     {
         $memberships = Membership::with('member')
+            ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($membership) {
                 return [
