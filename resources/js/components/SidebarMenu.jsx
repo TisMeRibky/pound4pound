@@ -36,6 +36,15 @@ export default function SidebarMenu({ onLogout }) {
 
         <li
           className={`${menuItem} ${
+            isActive('/expenses') ? 'text-black bg-[#FFDE59]' : 'text-white hover:text-black hover:bg-[#FFDE59]'
+          }`}
+          onClick={() => navigate('/expenses')}
+        >
+          Expenses
+        </li>
+
+        <li
+          className={`${menuItem} ${
             isActive('/programs') ? 'text-black bg-[#FFDE59]' : 'text-white hover:text-black hover:bg-[#FFDE59]'
           }`}
           onClick={() => navigate('/programs')}
