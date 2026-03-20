@@ -51,6 +51,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/walk-ins', [WalkInController::class, 'index']);
     Route::post('/walk-ins', [WalkInController::class, 'store']);
     Route::get('/walk-ins/{walkIn}', [WalkInController::class, 'show']);
+    Route::put('/walk-ins/{walkIn}', [WalkInController::class, 'update']);
     Route::delete('/walk-ins/{walkIn}', [WalkInController::class, 'destroy']);
     Route::get('/payments', [PaymentController::class, 'index']);
     Route::get('/payments', [PaymentController::class, 'index']);
@@ -60,6 +61,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/payments/{payment}', [PaymentController::class, 'destroy']);
     Route::get('/training-subscriptions', [TrainingSubscriptionController::class, 'index']);
     Route::post('/training-subscriptions', [TrainingSubscriptionController::class, 'store']);
+    Route::put('/training-subscriptions/{trainingSubscription}', [TrainingSubscriptionController::class, 'update']);
+    Route::delete('/training-subscriptions/{trainingSubscription}', [TrainingSubscriptionController::class, 'destroy']);
 });
 
 

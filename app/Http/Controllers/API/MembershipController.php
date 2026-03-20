@@ -49,7 +49,7 @@ class MembershipController extends Controller
         // Auto-create payment record — correct columns
         Payment::create([
             'member_id'      => $validated['member_id'],
-            'amount'         => 1000,
+            'amount'         => 500,
             'payment_date'   => $validated['start_date'],
             'payment_type'   => 'annual_membership',
             'payment_method' => null,

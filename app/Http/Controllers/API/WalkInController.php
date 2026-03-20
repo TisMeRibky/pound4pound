@@ -37,15 +37,11 @@ class WalkInController extends Controller
         $hasMembership = (bool) $validated['has_membership'];
 
         if ($hasMembership && empty($validated['member_id'])) {
-            return response()->json([
-                'message' => 'A member must be selected when has_membership is true.'
-            ], 422);
+            return response()->json(['message' => 'A member must be selected when has_membership is true.'], 422);
         }
 
         if (!$hasMembership && empty($validated['guest_name'])) {
-            return response()->json([
-                'message' => 'A guest name is required for non-members.'
-            ], 422);
+            return response()->json(['message' => 'A guest name is required for non-members.'], 422);
         }
 
         if ($hasMembership) {
@@ -53,15 +49,11 @@ class WalkInController extends Controller
             $membership = $member->membership()->first();
 
             if (!$membership) {
-                return response()->json([
-                    'message' => 'This member does not have an active membership. The non-member rate applies.'
-                ], 422);
+                return response()->json(['message' => 'This member does not have an active membership. The non-member rate applies.'], 422);
             }
 
             if ($membership->type === 'annual' && $membership->end_date && $membership->end_date->lt(now())) {
-                return response()->json([
-                    'message' => 'This member\'s annual membership has expired. The non-member rate applies.'
-                ], 422);
+                return response()->json(['message' => 'This member\'s annual membership has expired. The non-member rate applies.'], 422);
             }
         }
 
@@ -76,7 +68,6 @@ class WalkInController extends Controller
             'notes'          => $validated['notes'] ?? null,
         ]);
 
-        // Auto-create payment record — correct columns this time
         Payment::create([
             'member_id'      => $hasMembership ? $validated['member_id'] : null,
             'amount'         => $amount,
@@ -97,8 +88,25 @@ class WalkInController extends Controller
         return response()->json(['data' => $this->format($walkIn->load('member'))]);
     }
 
+    public function update(Request $request, WalkIn $walkIn)
+    {
+        $validated = $request->validate([
+            'date'   => 'required|date',
+            'amount' => 'required|numeric|min:0',
+            'notes'  => 'nullable|string|max:500',
+        ]);
+
+        $walkIn->update($validated);
+
+        return response()->json([
+            'message' => 'Walk-in updated successfully.',
+            'data'    => $this->format($walkIn),
+        ]);
+    }
+
     public function destroy(WalkIn $walkIn)
     {
+        
         $walkIn->delete();
         return response()->json(null, 204);
     }

@@ -84,9 +84,6 @@ export default function CreateMembership({ onClose }) {
         </button>
 
         <h2 className="text-xl font-bold mb-1">Add Membership</h2>
-        <p className="text-sm text-gray-500 mb-4">
-          Annual membership · <span className="font-semibold text-[#03023B]">₱1,000</span>
-        </p>
 
         <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
 

@@ -5,10 +5,10 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Member;
 use App\Models\Payment;
+use App\Models\WalkIn;
 use App\Exports\GymReportExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
-
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
@@ -37,47 +37,66 @@ class MemberController extends Controller
     {
         $member->load([
             'membership',
-            'trainingSubscriptions.plan.program'
+            'trainingSubscriptions.plan.program',
         ]);
 
+        // Fetch walk-ins for this member
+        $walkIns = WalkIn::where('member_id', $member->id)
+            ->orderBy('date', 'desc')
+            ->get()
+            ->map(fn($w) => [
+                'id'             => $w->id,
+                'date'           => $w->date?->format('Y-m-d'),
+                'amount'         => $w->amount,
+                'has_membership' => $w->has_membership,
+                'notes'          => $w->notes,
+            ]);
+
         return response()->json([
-            'id' => $member->id,
+            'id'         => $member->id,
             'first_name' => $member->first_name,
-            'last_name' => $member->last_name,
-            'email' => $member->email,
-            'phone' => $member->phone,
-            'status' => $member->status,
+            'last_name'  => $member->last_name,
+            'email'      => $member->email,
+            'phone'      => $member->phone,
+            'status'     => $member->status,
             'membership' => $member->membership ? [
-                'type' => $member->membership->type,
-                'start_date' => $member->membership->start_date,
-                'end_date' => $member->membership->end_date,
+                'type'       => $member->membership->type,
+                'start_date' => $member->membership->start_date?->format('Y-m-d'),
+                'end_date'   => $member->membership->end_date?->format('Y-m-d'),
             ] : null,
-            'training_subscriptions' => $member->trainingSubscriptions->map(function($sub) {
+            'training_subscriptions' => $member->trainingSubscriptions->map(function ($sub) {
                 return [
-                    'id' => $sub->id,
-                    'status' => $sub->status,
-                    'start_date' => $sub->start_date,
-                    'end_date' => $sub->end_date,
-                    'plan' => $sub->plan ? [
-                        'id' => $sub->plan->id,
-                        'name' => $sub->plan->name,
+                    'id'         => $sub->id,
+                    'status'     => $sub->status,
+                    'start_date' => $sub->start_date?->format('Y-m-d'),
+                    'end_date'   => $sub->end_date?->format('Y-m-d'),
+                    'plan'       => $sub->plan ? [
+                        'id'            => $sub->plan->id,
+                        'name'          => $sub->plan->name,
                         'duration_days' => $sub->plan->duration_days,
-                        'price' => $sub->plan->price,
-                        'program' => $sub->plan->program ? [
-                            'id' => $sub->plan->program->id,
+                        'price'         => $sub->plan->price,
+                        'program'       => $sub->plan->program ? [
+                            'id'   => $sub->plan->program->id,
                             'name' => $sub->plan->program->name,
                         ] : null,
                     ] : null,
                 ];
             }),
+            'walk_ins' => $walkIns,
         ]);
-
-        return response()->json(['message' => 'Member created']);
     }
 
     public function update(Request $request, Member $member)
     {
-        $member->update($request->all());
+        $validated = $request->validate([
+            'first_name' => 'required|string',
+            'last_name'  => 'required|string',
+            'email'      => 'required|email|unique:members,email,' . $member->id,
+            'phone'      => 'nullable|string',
+            'status'     => 'required|string',
+        ]);
+
+        $member->update($validated);
         return response()->json($member);
     }
 
@@ -87,15 +106,11 @@ class MemberController extends Controller
         return response()->json(null, 204);
     }
 
-    //MEMBERSHIPS
-
     public function withoutMembership(Request $request)
     {
         $members = Member::where('status', 'Active')
             ->whereDoesntHave('membership')
             ->get(['id', 'first_name', 'last_name', 'status']);
-
-        \Log::info('Members without membership:', $members->toArray()); // <-- logs to storage/logs/laravel.log
 
         return response()->json(['data' => $members]);
     }
@@ -106,19 +121,13 @@ class MemberController extends Controller
             ->whereHas('membership')
             ->get(['id', 'first_name', 'last_name']);
 
-        return response()->json([
-            'data' => $members
-        ]);
+        return response()->json(['data' => $members]);
     }
-
 
     public function exportReport()
     {
-        // MEMBER DATA
+        $now     = Carbon::now();
         $members = Member::all();
-
-        // DASHBOARD DATA (simplified example)
-        $now = Carbon::now();
 
         $monthlyRevenue = Payment::whereMonth('payment_date', $now->month)
             ->whereYear('payment_date', $now->year)
@@ -129,15 +138,15 @@ class MemberController extends Controller
 
         $dashboardStats = [
             'members' => [
-                'total_active' => Member::where('status', 'active')->count(),
-                'annual' => Member::where('type', 'annual')->count(),
-                'walk_in' => Member::where('type', 'walk-in')->count(),
-                'new_this_month' => Member::whereMonth('created_at', $now->month)->count(),
+                'total_active'   => Member::where('status', 'Active')->count(),
+                'new_this_month' => Member::whereMonth('created_at', $now->month)
+                                          ->whereYear('created_at', $now->year)
+                                          ->count(),
             ],
             'revenue' => [
                 'monthly_total' => $monthlyRevenue,
-                'annual_total' => $annualRevenue,
-            ]
+                'annual_total'  => $annualRevenue,
+            ],
         ];
 
         return Excel::download(
