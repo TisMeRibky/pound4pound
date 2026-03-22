@@ -36,7 +36,13 @@ export default function Expense({ user }) {
   
   const columns = [
     { key: 'description', label: 'Description' },
-    { key: 'exp_date', label: 'Date' },
+    {
+      key: 'exp_date',
+      label: 'Date',
+      render: (row) => row.exp_date
+        ? new Date(row.exp_date).toLocaleDateString('en-PH', { year: 'numeric', month: 'short', day: 'numeric' })
+        : '—',
+    },
     { key: 'exp_type', label: 'Type' },
     { key: 'exp_amount', label: 'Amount', type: 'currency' },
   ];

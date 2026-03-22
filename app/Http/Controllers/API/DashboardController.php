@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Expense;
 use App\Models\Member;
 use App\Models\Membership;
 use App\Models\Payment;
@@ -13,17 +14,20 @@ use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\GymReportExport;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $now = Carbon::now();
+        $year = (int) $request->query('year', Carbon::now()->year);
+
+        $now          = Carbon::now();
+        $targetYear   = Carbon::createFromDate($year, 1, 1);
         $startOfMonth = $now->copy()->startOfMonth();
         $endOfMonth   = $now->copy()->endOfMonth();
         $expiryWindow = $now->copy()->addDays(10);
-        $startOfYear  = $now->copy()->startOfYear();
 
         $totalActive = Member::where('status', 'Active')->count();
 
@@ -43,17 +47,28 @@ class DashboardController extends Controller
         $annualRevenue = Payment::whereYear('payment_date', $now->year)
             ->sum('amount');
 
+        // Revenue chart for selected year
         $revenueByMonth = Payment::selectRaw('MONTH(payment_date) as month, SUM(amount) as total')
-            ->whereYear('payment_date', $now->year)
+            ->whereYear('payment_date', $year)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get()
+            ->keyBy('month');
+
+        // Expenses chart for selected year
+        $expensesByMonth = Expense::selectRaw('MONTH(exp_date) as month, SUM(exp_amount) as total')
+            ->whereRaw('YEAR(exp_date) = ?', [$year])
             ->groupBy('month')
             ->orderBy('month')
             ->get()
             ->keyBy('month');
 
         $months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
         $revenueChart = collect(range(1, 12))->map(fn($m) => [
-            'name'  => $months[$m - 1],
-            'value' => isset($revenueByMonth[$m]) ? (float) $revenueByMonth[$m]->total : 0,
+            'name'     => $months[$m - 1],
+            'revenue'  => isset($revenueByMonth[$m])  ? (float) $revenueByMonth[$m]->total  : 0,
+            'expenses' => isset($expensesByMonth[$m]) ? (float) $expensesByMonth[$m]->total : 0,
         ])->values();
 
         $expiringMemberships = Membership::with('member')
@@ -104,27 +119,28 @@ class DashboardController extends Controller
         return response()->json([
             'data' => [
                 'members' => [
-                    'total_active'         => $totalActive,
-                    'annual'               => $annualMembers,
-                    'walk_in'              => $walkInMembers,
-                    'new_this_month'       => $newMembersThisMonth,
+                    'total_active'   => $totalActive,
+                    'annual'         => $annualMembers,
+                    'walk_in'        => $walkInMembers,
+                    'new_this_month' => $newMembersThisMonth,
                 ],
                 'revenue' => [
-                    'monthly_total'        => (float) $monthlyRevenue,
-                    'annual_total'         => (float) $annualRevenue,
-                    'chart'                => $revenueChart,
+                    'monthly_total' => (float) $monthlyRevenue,
+                    'annual_total'  => (float) $annualRevenue,
+                    'chart'         => $revenueChart,
+                    'chart_year'    => $year,
                 ],
-                'expiring_memberships'     => $expiringMemberships,
-                'expiring_subscriptions'   => $expiringSubscriptions,
-                'recent_payments'          => $recentPayments,
-                'promo_plans'              => $promoPlans,
+                'expiring_memberships'   => $expiringMemberships,
+                'expiring_subscriptions' => $expiringSubscriptions,
+                'recent_payments'        => $recentPayments,
+                'promo_plans'            => $promoPlans,
             ]
         ]);
     }
 
     private function getDashboardData()
     {
-        $now = Carbon::now();
+        $now          = Carbon::now();
         $startOfMonth = $now->copy()->startOfMonth();
         $endOfMonth   = $now->copy()->endOfMonth();
         $startOfYear  = $now->copy()->startOfYear();
@@ -148,14 +164,14 @@ class DashboardController extends Controller
 
         return [
             'members' => [
-                'total_active' => $totalActive,
-                'annual' => $annualMembers,
-                'walk_in' => $walkInMembers,
+                'total_active'   => $totalActive,
+                'annual'         => $annualMembers,
+                'walk_in'        => $walkInMembers,
                 'new_this_month' => $newMembersThisMonth,
             ],
             'revenue' => [
                 'monthly_total' => (float) $monthlyRevenue,
-                'annual_total' => (float) $annualRevenue,
+                'annual_total'  => (float) $annualRevenue,
             ]
         ];
     }
@@ -163,7 +179,7 @@ class DashboardController extends Controller
     public function exportFullReport()
     {
         $dashboardStats = $this->getDashboardData();
-        $members = Member::all();
+        $members        = Member::all();
 
         return Excel::download(
             new GymReportExport($dashboardStats, $members),
