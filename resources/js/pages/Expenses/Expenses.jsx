@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DataTable from '../../components/DataTable';
 import CreateExpense from './CreateExpense';
-//import ExpenseProfile from './ExpenseProfile';
+import ExpenseDetails from './ExpenseDetails';
 import white_circle from '@/assets/plus-circle-white.svg';
 import black_circle from '@/assets/plus-circle-black.svg';
 
@@ -81,7 +81,7 @@ export default function Expense({ user }) {
 
         {/* Edit/Delete Expense Modal */}
         {selectedExpense && (
-          <ExpenseProfile
+          <ExpenseDetails
             expense={selectedExpense}
             token={token}
             onSuccess={() => {
