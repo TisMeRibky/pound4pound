@@ -45,5 +45,12 @@ class ExpenseController extends Controller
 
         return response()->json(['message' => 'Expense updated successfully', 'data' => $expense]);
     }
+
+    public function destroy(Expense $expense)
+    {
+        $expense->delete();
+
+        return response()->json(['message' => 'Expense deleted successfully']);
+    }
 }
 
