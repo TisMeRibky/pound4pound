@@ -26,4 +26,24 @@ class ExpenseController extends Controller
 
         return response()->json(['message' => 'Expense added successfully', 'data' => $expense], 201);
     }
+
+    public function show(Expense $expense)
+    {
+        return response()->json(['data' => $expense]);
+    }
+
+    public function update(Request $request, Expense $expense)
+    {
+        $validated = $request->validate([
+            'description' => 'required|string',
+            'exp_date' => 'required|date',
+            'exp_type' => 'required|string',
+            'exp_amount' => 'required|numeric|min:0',
+        ]);
+
+        $expense->update($validated);
+
+        return response()->json(['message' => 'Expense updated successfully', 'data' => $expense]);
+    }
 }
+
