@@ -1,8 +1,8 @@
 FROM php:8.3-fpm
 
 RUN apt-get update && apt-get install -y \
-    git curl zip unzip libpng-dev libxml2-dev libonig-dev \
-    && docker-php-ext-install gd mbstring xml pdo pdo_mysql
+    git curl zip unzip libpng-dev libxml2-dev libonig-dev libzip-dev \
+    && docker-php-ext-install gd mbstring xml pdo pdo_mysql zip
     
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
