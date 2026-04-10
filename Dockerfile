@@ -1,9 +1,9 @@
 FROM php:8.3-fpm
 
 RUN apt-get update && apt-get install -y \
-    git curl zip unzip libpng-dev libxml2-dev \
+    git curl zip unzip libpng-dev libxml2-dev libonig-dev \
     && docker-php-ext-install gd mbstring xml pdo pdo_mysql
-
+    
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
